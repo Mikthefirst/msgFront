@@ -131,7 +131,7 @@ const Landing: React.FC = () => {
                   size="lg" 
                   className="bg-white text-blue-600 hover:bg-gray-100 focus:ring-white"
                 >
-                  Sign up for free
+                  Sign up
                 </Button>
               </Link>
             </div>

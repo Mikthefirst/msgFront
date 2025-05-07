@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Mail, Lock } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const { login, isLoading, error, isAuthenticated } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  // Add this useEffect to handle redirection if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/chat");
-    }
-  }, [isAuthenticated, navigate]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -43,12 +35,32 @@ const Login: React.FC = () => {
 
     if (!validateForm()) return;
 
+    setIsLoading(true);
+    setError(null);
+
     try {
-      await login(email, password);
-      // The navigation is now handled by the useEffect when isAuthenticated changes
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+      navigate("/chat");
+
     } catch (err) {
-      // Error handling is done in the store
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred"
+      );
       console.error("Login error:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
