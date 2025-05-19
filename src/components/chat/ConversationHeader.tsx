@@ -1,10 +1,10 @@
 import React from 'react';
-import { useChatStore } from '../../store/useChatStore';
+import { rootStore } from '../../store/RootStore';
 import Avatar from '../ui/Avatar';
 import { PhoneCall, Video, MoreVertical } from 'lucide-react';
 
 const ConversationHeader: React.FC = () => {
-  const { activeConversationId, conversations } = useChatStore();
+  const { activeConversationId, conversations } =  rootStore.conversationStore;
   
   // Find the active conversation
   const activeConversation = conversations.find(conv => conv.id === activeConversationId);
@@ -33,7 +33,7 @@ const ConversationHeader: React.FC = () => {
     <div className="border-b border-gray-200 dark:border-gray-700 p-4 flex items-center">
       <Avatar
         src={avatar || ''}
-        alt={displayName}
+        alt={displayName||''}
         size="md"
         status={isOnline ? 'online' : undefined}
       />

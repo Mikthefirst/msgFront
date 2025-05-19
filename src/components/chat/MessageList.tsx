@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { useChatStore } from '../../store/useChatStore';
+import { rootStore } from '../../store/RootStore';
 import Avatar from '../ui/Avatar';
 import { formatMessageTime } from '../../utils/dateUtils';
 import { CheckCheck } from 'lucide-react';
+import { Message } from '../../types';
 
 const MessageList: React.FC = () => {
-  const { activeConversationId, messages } = useChatStore();
+  const { activeConversationId } = rootStore.chatStore;
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
-  const conversationMessages = activeConversationId ? messages[activeConversationId] || [] : [];
+  const conversationMessages:Message[] = rootStore.chatStore.activeMessages;
   
   // Scroll to bottom whenever messages change
   useEffect(() => {

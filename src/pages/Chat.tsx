@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {  } from "react";
 import MainLayout from '../components/layout/MainLayout';
 import ConversationList from '../components/chat/ConversationList';
 import MessageList from '../components/chat/MessageList';

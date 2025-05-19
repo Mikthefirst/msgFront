@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useChatStore } from '../../store/useChatStore';
+import { rootStore } from '../../store/RootStore';
+
 import { Smile, Paperclip, Send } from 'lucide-react';
 
 const ChatInput: React.FC = () => {
   const [message, setMessage] = useState('');
-  const { activeConversationId, sendMessage } = useChatStore();
+  const { activeConversationId, sendMessage } = rootStore.chatStore;
   
   const handleSendMessage = () => {
     if (!message.trim() || !activeConversationId) return;
