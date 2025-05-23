@@ -3,6 +3,8 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from "./RootStore";
 import { Conversation, Message } from "../types";
 import ConversationService from "../service/ConversationService";
+import webSocketManager from "../ws/WebSocketManager";
+
 
 export class ConversationStore {
   rootStore: RootStore;
@@ -14,6 +16,9 @@ export class ConversationStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+
+    //fixThat
+    //webSocketManager.connect("wss://your-websocket-server-url");
   }
 
   async fetchConversations() {
@@ -29,6 +34,14 @@ export class ConversationStore {
   }
 
   setActiveConversation(id: string) {
+    // Leave previous room
+    if (this.activeConversationId) {
+      webSocketManager.leaveRoom(this.activeConversationId);
+    }
+
+    // Join new room
+    webSocketManager.joinRoom(id);
+
     this.activeConversationId = id;
     this.resetUnread(id);
   }

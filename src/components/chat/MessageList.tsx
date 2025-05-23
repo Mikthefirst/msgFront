@@ -1,3 +1,4 @@
+//MessageList.tsx
 import React, { useEffect, useRef } from 'react';
 import { rootStore } from '../../store/RootStore';
 import Avatar from '../ui/Avatar';

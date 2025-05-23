@@ -1,3 +1,4 @@
+//ConversationList.tsx
 import React, { useMemo, useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store/StoreContext";
@@ -8,43 +9,29 @@ import { Conversation } from "../../types";
 
 const ConversationList: React.FC = observer(() => {
   const { conversationStore } = useStore();
-
   const { conversations, activeConversationId, setActiveConversation } =
     conversationStore;
 
-    useEffect(() => {
-       conversationStore.fetchConversations();
-       conversationStore.conversations = conversationStore.conversations.map(
-         (conv) => ({
-           ...conv,
-           participants: [], // заглушка
-           unreadCount: 0,
-           isGroup: true, // если все группы
-         })
-       );
-      
-      console.log(conversationStore);
-    }, [conversationStore]);
-  
-  
+  useEffect(() => {
+    conversationStore.fetchConversations();
+    conversationStore.conversations = conversationStore.conversations.map(
+      (conv) => ({
+        ...conv,
+        unreadCount: 0,
+        isGroup: true,
+      })
+    );
+  }, [conversationStore]);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredConversations = useMemo(() => {
     if (!searchQuery.trim()) return conversations;
 
     const lower = searchQuery.toLowerCase();
-    return conversations.filter((conv) => {
-      if (conv.isGroup && conv.groupName) {
-        return conv.groupName.toLowerCase().includes(lower);
-      }
-      if (!Array.isArray(conv.participants)) return false;
-
-      return conv.participants.some(
-        (p) =>
-          p.name.toLowerCase().includes(lower) ||
-          p.username.toLowerCase().includes(lower)
-      );
-    });
+    return conversations.filter(
+      (conv) => conv.groupName && conv.groupName.toLowerCase().includes(lower)
+    );
   }, [searchQuery, conversations]);
 
   const sortedConversations = useMemo(() => {
@@ -54,24 +41,6 @@ const ConversationList: React.FC = observer(() => {
       return bTime.localeCompare(aTime);
     });
   }, [filteredConversations]);
-
-  const getDisplayName = (conversation: (typeof conversations)[0]) => {
-    if (conversation.isGroup) return conversation.groupName||false;
-    const other = conversation.participants.find((p) => p.id !== "1");
-    return other?.name || "Unknown";
-  };
-
-  const getAvatar = (conversation: (typeof conversations)[0]) => {
-    if (conversation.isGroup) return conversation.groupAvatar || false;
-    const other = conversation.participants.find((p) => p.id !== "1");
-    return other?.avatar;
-  };
-
-  const getIsOnline = (conversation: (typeof conversations)[0]) => {
-    if (conversation.isGroup) return false;
-    const other = conversation.participants.find((p) => p.id !== "1");
-    return other?.isOnline || false;
-  };
 
   return (
     <div className="flex flex-col h-full">
@@ -100,26 +69,23 @@ const ConversationList: React.FC = observer(() => {
       <div className="overflow-y-auto flex-1">
         {sortedConversations.map((conversation: Conversation) => {
           const isActive = activeConversationId === conversation.id;
-          const displayName = getDisplayName(conversation);
-          const avatar = getAvatar(conversation);
-          const isOnline = getIsOnline(conversation);
+          const displayName = conversation.groupName || "Unnamed Group";
+          const avatar = conversation.groupAvatar || "";
+          const isOnline = false;
 
           return (
             <div
               key={conversation.id}
-              className={`
-                p-4 flex items-center cursor-pointer border-l-4 hover:bg-gray-100 dark:hover:bg-gray-700
-                ${
-                  isActive
-                    ? "border-l-blue-500 bg-blue-50 dark:bg-gray-700"
-                    : "border-l-transparent"
-                }
-              `}
+              className={`p-4 flex items-center cursor-pointer border-l-4 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                isActive
+                  ? "border-l-blue-500 bg-blue-50 dark:bg-gray-700"
+                  : "border-l-transparent"
+              }`}
               onClick={() => setActiveConversation(conversation.id)}
             >
               <Avatar
-                src={avatar || ""}
-                alt={displayName || "Conversation"}
+                src={avatar}
+                alt={displayName}
                 size="md"
                 status={isOnline ? "online" : "away"}
               />
