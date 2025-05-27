@@ -29,6 +29,7 @@ export class ChatStore {
     this.isLoading = true;
     try {
       const msgs = await this.chatService.fetchMessages(id);
+      console.log(msgs);
       this.messages[id] = msgs.map((msg) => ({ ...msg, read: true }));
       this.rootStore.conversationStore.resetUnread(id);
     } catch (e) {

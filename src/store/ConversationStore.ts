@@ -18,7 +18,14 @@ export class ConversationStore {
     makeAutoObservable(this);
 
     //fixThat
+    webSocketManager.connect("http://localhost:3000");
     //webSocketManager.connect("wss://your-websocket-server-url");
+
+    webSocketManager.onMessage((data) => {
+      if (data.action === "new-message") {
+        this.handleIncomingMessage(data.message);
+      }
+    });
   }
 
   async fetchConversations() {
@@ -33,17 +40,48 @@ export class ConversationStore {
     }
   }
 
+  // Метод, который явно отправляет событие 'join-room' на сервер
+  joinRoom(conversationId: string) {
+    webSocketManager.joinRoom(conversationId);
+  }
+
   setActiveConversation(id: string) {
-    // Leave previous room
-    if (this.activeConversationId) {
+    console.log("before convID:", id);
+
+    if (
+      this.activeConversationId !== undefined &&
+      this.activeConversationId !== null
+    ) {
       webSocketManager.leaveRoom(this.activeConversationId);
     }
 
-    // Join new room
-    webSocketManager.joinRoom(id);
-
     this.activeConversationId = id;
-    this.resetUnread(id);
+    this.rootStore.chatStore.setActiveConversation(this.activeConversationId);
+    console.log("after convID:", this.activeConversationId);
+    this.joinRoom(this.activeConversationId);
+
+    this.resetUnread(this.activeConversationId);
+  }
+
+  handleIncomingMessage(message: Message) {
+    const { conversationId } = message;
+    runInAction(() => {
+      this.updateLastMessage(conversationId, message);
+      if (conversationId === this.activeConversationId) {
+        // optionally notify a chat window or update UI
+        console.log("Message for active conversation:", message);
+      } else {
+        this.incrementUnread(conversationId);
+      }
+    });
+  }
+
+  incrementUnread(conversationId: string) {
+    this.conversations = this.conversations.map((conv) =>
+      conv.id === conversationId
+        ? { ...conv, unreadCount: (conv.unreadCount || 0) + 1 }
+        : conv
+    );
   }
 
   resetUnread(conversationId: string) {

@@ -9,9 +9,13 @@ import { Conversation } from "../../types";
 
 const ConversationList: React.FC = observer(() => {
   const { conversationStore } = useStore();
-  const { conversations, activeConversationId, setActiveConversation } =
+  const { conversations, activeConversationId } =
     conversationStore;
-
+    
+  const onClickConversation = (id: string) => {
+      conversationStore.setActiveConversation(id);
+    };
+  
   useEffect(() => {
     conversationStore.fetchConversations();
     conversationStore.conversations = conversationStore.conversations.map(
@@ -81,7 +85,7 @@ const ConversationList: React.FC = observer(() => {
                   ? "border-l-blue-500 bg-blue-50 dark:bg-gray-700"
                   : "border-l-transparent"
               }`}
-              onClick={() => setActiveConversation(conversation.id)}
+              onClick={() => onClickConversation(conversation.id)}
             >
               <Avatar
                 src={avatar}

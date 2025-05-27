@@ -1,12 +1,13 @@
 //MessageList.tsx
 import React, { useEffect, useRef } from 'react';
+import { observer } from "mobx-react-lite";
 import { rootStore } from '../../store/RootStore';
 import Avatar from '../ui/Avatar';
 import { formatMessageTime } from '../../utils/dateUtils';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '../../types';
 
-const MessageList: React.FC = () => {
+const MessageList: React.FC = observer(() =>  {
   const { activeConversationId } = rootStore.chatStore;
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
@@ -17,6 +18,7 @@ const MessageList: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversationMessages]);
   
+  console.log('activeConversationId:', activeConversationId);
   if (!activeConversationId) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -80,6 +82,6 @@ const MessageList: React.FC = () => {
       <div ref={messagesEndRef} />
     </div>
   );
-};
+});
 
 export default MessageList;

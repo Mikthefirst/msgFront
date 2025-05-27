@@ -11,10 +11,11 @@ export interface User {
 export interface Message {
   id: string;
   senderId: string;
+  conversationId: string;
   content: string;
   timestamp: string;
   read: boolean;
-  type: 'text' | 'image' | 'file';
+  type: "text" | "image" | "file";
   fileUrl?: string;
 }
 

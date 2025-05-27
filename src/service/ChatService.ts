@@ -3,7 +3,7 @@ import { Message } from "../types";
 
 export default class ChatService {
   async fetchMessages(conversationId: string): Promise<Message[]> {
-    const res = await fetch(`/api/messages/${conversationId}`);
+    const res = await fetch(`http://localhost:3000/messages/${conversationId}`, {credentials:'include'});
     if (!res.ok) throw new Error("Failed to load messages");
     return await res.json();
   }

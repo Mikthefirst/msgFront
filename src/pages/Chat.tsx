@@ -4,8 +4,9 @@ import ConversationList from '../components/chat/ConversationList';
 import MessageList from '../components/chat/MessageList';
 import ChatInput from '../components/chat/ChatInput';
 import ConversationHeader from '../components/chat/ConversationHeader';
+import { observer } from "mobx-react-lite";
 
-const Chat: React.FC = () => {
+const Chat: React.FC = observer(() => {
 
   return (
     <MainLayout sidebar={<ConversationList />}>
@@ -16,6 +17,6 @@ const Chat: React.FC = () => {
       </div>
     </MainLayout>
   );
-};
+});
 
 export default Chat;
