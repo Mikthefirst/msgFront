@@ -1,18 +1,27 @@
 //MessageList.tsx
 import React, { useEffect, useRef } from 'react';
 import { observer } from "mobx-react-lite";
-import { rootStore } from '../../store/RootStore';
 import Avatar from '../ui/Avatar';
 import { formatMessageTime } from '../../utils/dateUtils';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '../../types';
+import { useStore } from '../../store/StoreContext';
 
-const MessageList: React.FC = observer(() =>  {
-  const { activeConversationId } = rootStore.chatStore;
+const MessageList: React.FC = observer(() => {
+    const { chatStore } = useStore();
+  
+  const { activeConversationId } = chatStore;
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
-  const conversationMessages:Message[] = rootStore.chatStore.activeMessages;
+  const conversationMessages:Message[] = chatStore.activeMessages;
   
+  useEffect(() => {
+    if (!chatStore.activeConversationId) return;
+    console.log("Новый activeConversationId:", chatStore.activeConversationId);
+    chatStore.fetchMessages();
+  }, [chatStore.activeConversationId])
+  
+
   // Scroll to bottom whenever messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

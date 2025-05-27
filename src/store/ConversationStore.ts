@@ -46,18 +46,14 @@ export class ConversationStore {
   }
 
   setActiveConversation(id: string) {
-    console.log("before convID:", id);
-
     if (
       this.activeConversationId !== undefined &&
       this.activeConversationId !== null
     ) {
       webSocketManager.leaveRoom(this.activeConversationId);
     }
-
     this.activeConversationId = id;
     this.rootStore.chatStore.setActiveConversation(this.activeConversationId);
-    console.log("after convID:", this.activeConversationId);
     this.joinRoom(this.activeConversationId);
 
     this.resetUnread(this.activeConversationId);

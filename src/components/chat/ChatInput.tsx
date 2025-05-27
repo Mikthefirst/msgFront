@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { rootStore } from '../../store/RootStore';
 
 import { Smile, Paperclip, Send } from 'lucide-react';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../store/StoreContext';
 
-const ChatInput: React.FC = () => {
+const ChatInput: React.FC = observer(() => {
+      const { chatStore } = useStore();
+  
   const [message, setMessage] = useState('');
-  const { activeConversationId, sendMessage } = rootStore.chatStore;
+  const { activeConversationId, sendMessage } = chatStore;
   
   const handleSendMessage = () => {
     if (!message.trim() || !activeConversationId) return;
@@ -62,6 +65,6 @@ const ChatInput: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default ChatInput;

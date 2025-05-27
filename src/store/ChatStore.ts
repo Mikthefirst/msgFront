@@ -26,17 +26,31 @@ export class ChatStore {
 
   async setActiveConversation(id: string) {
     this.activeConversationId = id;
+    console.log("chatStore conv_id: ", this.activeConversationId);
+  }
+
+  async fetchMessages() {
     this.isLoading = true;
-    try {
-      const msgs = await this.chatService.fetchMessages(id);
-      console.log(msgs);
-      this.messages[id] = msgs.map((msg) => ({ ...msg, read: true }));
-      this.rootStore.conversationStore.resetUnread(id);
-    } catch (e) {
+    if (this.activeConversationId){
+      try {
+        const msgs = await this.chatService.fetchMessages(
+          this.activeConversationId
+        );
+        console.log(msgs);
+        this.messages[this.activeConversationId] = msgs.map((msg) => ({
+          ...msg,
+          read: true,
+        }));
+        this.rootStore.conversationStore.resetUnread(this.activeConversationId);
+      } catch (e) {
         console.log(e);
-    } finally {
-      this.isLoading = false;
+      } finally {
+        this.isLoading = false;
+      }
     }
+    else {
+      console.log("empty conv_id field");
+      }
   }
 
   async sendMessage(conversationId: string, content: string) {
