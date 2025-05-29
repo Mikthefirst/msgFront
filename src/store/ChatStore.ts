@@ -2,7 +2,7 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./RootStore";
 import { Message } from "../types";
-import ChatService from "../service/ChatService";
+import ChatService from "./services/ChatService";
 
 export class ChatStore {
   rootStore: RootStore;
@@ -26,12 +26,12 @@ export class ChatStore {
 
   async setActiveConversation(id: string) {
     this.activeConversationId = id;
-    console.log("chatStore conv_id: ", this.activeConversationId);
+    //console.log("chatStore conv_id: ", this.activeConversationId);
   }
 
   async fetchMessages() {
     this.isLoading = true;
-    if (this.activeConversationId){
+    if (this.activeConversationId) {
       try {
         const msgs = await this.chatService.fetchMessages(
           this.activeConversationId
@@ -42,36 +42,36 @@ export class ChatStore {
           read: true,
         }));
         this.rootStore.conversationStore.resetUnread(this.activeConversationId);
+        this.rootStore.conversationStore.updateLastMessage(
+          this.activeConversationId,
+          this.messages[this.activeConversationId][-1]
+        );
       } catch (e) {
         console.log(e);
       } finally {
         this.isLoading = false;
       }
-    }
-    else {
+    } else {
       console.log("empty conv_id field");
-      }
+    }
   }
 
-  async sendMessage(conversationId: string, content: string) {
+  sendMessage = async (
+    conversationId: string,
+    content: string,
+    type = "text"
+  ) => {
     try {
-      const message = await this.chatService.sendMessage(
-        conversationId,
-        content
-      );
-      this.messages[conversationId] = [
-        ...(this.messages[conversationId] || []),
-        message,
-      ];
-      this.rootStore.conversationStore.updateLastMessage(
-        conversationId,
-        message
-      );
+      console.log("chat Store:", conversationId, "\n", content, "\n", type);
+      if (type === "text")
+        await this.chatService.sendMessageTEXT(conversationId, content);
+
+      this.fetchMessages();
     } catch (e) {
-      console.log(e)
-      this.error = String(e)
+      console.log(e);
+      this.error = String(e);
     }
-  }
+  };
 
   async markAsRead(conversationId: string, messageId: string) {
     try {

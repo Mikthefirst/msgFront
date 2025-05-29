@@ -1,5 +1,5 @@
 // services/ConversationService.ts
-import { Conversation } from "../types";
+import { Conversation } from "../../types";
 
 export default class ConversationService {
   async fetchConversations(): Promise<Conversation[]> {

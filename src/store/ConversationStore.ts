@@ -2,7 +2,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from "./RootStore";
 import { Conversation, Message } from "../types";
-import ConversationService from "../service/ConversationService";
+import ConversationService from "./services/ConversationService";
 import webSocketManager from "../ws/WebSocketManager";
 
 
