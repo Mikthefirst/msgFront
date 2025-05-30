@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useThemeStore } from './store/useThemeStore';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Chat from './pages/Chat';
-import Profile from './pages/Profile';
 import { StoreProvider } from "./store/StoreContext";
 import GroupsPage from './pages/GroupsPage';
+import UserProfile from './pages/UserProfile';
 
 
 
@@ -31,7 +31,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/group" element={<GroupsPage />} />
         </Routes>
