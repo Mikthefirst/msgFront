@@ -7,7 +7,8 @@ import Signup from './pages/Signup';
 import Chat from './pages/Chat';
 import { StoreProvider } from "./store/StoreContext";
 import GroupsPage from './pages/GroupsPage';
-import UserProfile from './pages/UserProfile';
+import UserProfile from './pages/Profile/UserProfile';
+import UserProfileView from './pages/Profile/UserProfileView';
 
 
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/profile/:id" element={<UserProfileView />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/group" element={<GroupsPage />} />
         </Routes>
