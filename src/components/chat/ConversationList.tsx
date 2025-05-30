@@ -6,8 +6,11 @@ import { Search, Plus } from "lucide-react";
 import Avatar from "../ui/Avatar";
 import { formatDistanceToNow } from "../../utils/dateUtils";
 import { Conversation } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 const ConversationList: React.FC = observer(() => {
+  const navigate = useNavigate();
+
   const { conversationStore } = useStore();
   const { conversations, activeConversationId } =
     conversationStore;
@@ -66,7 +69,7 @@ const ConversationList: React.FC = observer(() => {
           Messages
         </h2>
         <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors">
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4" onClick={() => navigate("/group")} />
         </button>
       </div>
 

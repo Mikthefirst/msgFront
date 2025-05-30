@@ -41,3 +41,24 @@ export function formatMessageTime(date: Date): string {
     hour12: true 
   });
 }
+
+
+export function formatDateNormal(dateString: string): string {
+  const date = new Date(dateString);
+
+  // Check for invalid date
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date string");
+  }
+
+  // Extract UTC components
+  const seconds = date.getUTCSeconds().toString().padStart(2, "0");
+  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+  const hours = date.getUTCHours().toString().padStart(2, "0");
+  let days = date.getUTCDay().toString().padStart(2, "0");
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); // Months are 0-indexed
+  const year = date.getUTCFullYear();
+  if (days[0] === "0") days = days[1];
+
+  return `${minutes}min; ${hours}h; ${days}days; ${month}month; ${year}year;`;
+}
