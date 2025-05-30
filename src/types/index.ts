@@ -18,9 +18,8 @@ export interface Message {
   content: string;
   timestamp: string;
   read: boolean;
-  type: "text" | "image" | "file";
+  type: MessageType;
   fileUrl?: string;
-  isCurrentUser: false;
   avatar?: string;
 }
 

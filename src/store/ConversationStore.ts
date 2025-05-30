@@ -17,9 +17,6 @@ export class ConversationStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
 
-    //fixThat
-    webSocketManager.connect("http://localhost:3000");
-    //webSocketManager.connect("wss://your-websocket-server-url");
 
     webSocketManager.onMessage((data) => {
       if (data.action === "new-message") {

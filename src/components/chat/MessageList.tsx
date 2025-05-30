@@ -17,7 +17,6 @@ const MessageList: React.FC = observer(() => {
 
   useEffect(() => {
     if (!chatStore.activeConversationId) return;
-    console.log("Новый activeConversationId:", chatStore.activeConversationId);
     chatStore.fetchMessages();
   }, [chatStore.activeConversationId])
   
@@ -41,7 +40,7 @@ const MessageList: React.FC = observer(() => {
   return (
     <div className="p-4 overflow-y-auto flex-1">
       {conversationMessages.map((message, index) => {
-        const isCurrentUser = userStore.user ? message.sender.id === userStore.user.id : false;
+        const isCurrentUser = userStore.user ? message.sender.id === userStore.user.id || message.sender.id==='hardcoding': false;
         const showAvatar = !isCurrentUser && (index === 0 || conversationMessages[index - 1].sender.id !== message.sender.id);
         
         return (

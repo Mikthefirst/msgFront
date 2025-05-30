@@ -1,7 +1,7 @@
 // stores/ChatStore.ts
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./RootStore";
-import { Message } from "../types";
+import { Message,  } from "../types";
 import ChatService from "./services/ChatService";
 
 export class ChatStore {
@@ -26,7 +26,6 @@ export class ChatStore {
 
   async setActiveConversation(id: string) {
     this.activeConversationId = id;
-    //console.log("chatStore conv_id: ", this.activeConversationId);
   }
 
   async fetchMessages() {
@@ -36,7 +35,6 @@ export class ChatStore {
         const msgs = await this.chatService.fetchMessages(
           this.activeConversationId
         );
-        console.log(msgs);
         this.messages[this.activeConversationId] = msgs.map((msg) => ({
           ...msg,
           read: true,
@@ -44,10 +42,13 @@ export class ChatStore {
         this.rootStore.conversationStore.resetUnread(this.activeConversationId);
         this.rootStore.conversationStore.updateLastMessage(
           this.activeConversationId,
-          this.messages[this.activeConversationId][-1]
+          this.messages[this.activeConversationId][
+            this.messages[this.activeConversationId].length - 1
+          ]
         );
       } catch (e) {
         console.log(e);
+        this.error = String(e);
       } finally {
         this.isLoading = false;
       }
@@ -63,10 +64,12 @@ export class ChatStore {
   ) => {
     try {
       console.log("chat Store:", conversationId, "\n", content, "\n", type);
-      if (type === "text")
+      if (type === "text") {
         await this.chatService.sendMessageTEXT(conversationId, content);
+      }
 
-      this.fetchMessages();
+      // УБРАНО: локальное добавление сообщения
+      // Оно теперь будет приходить через WebSocket ("new-message")
     } catch (e) {
       console.log(e);
       this.error = String(e);
@@ -84,6 +87,22 @@ export class ChatStore {
       this.error = String(e);
     }
   }
+
+  handleIncomingMessage = (message: Message) => {
+    const { conversationId } = message;
+
+    if (!this.messages[conversationId]) {
+      this.messages[conversationId] = [];
+    }
+
+    this.messages[conversationId].push(message);
+
+    if (conversationId === this.activeConversationId) {
+      this.rootStore.conversationStore.resetUnread(conversationId);
+      this.rootStore.conversationStore.updateLastMessage(
+        conversationId,
+        message
+      );
+    }
+  };
 }
-
-
