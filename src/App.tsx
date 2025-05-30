@@ -4,9 +4,11 @@ import { useThemeStore } from './store/useThemeStore';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Verification from './pages/Verification';
 import Chat from './pages/Chat';
 import Profile from './pages/Profile';
+import { StoreProvider } from "./store/StoreContext";
+
+
 
 function App() {
   const { mode } = useThemeStore();
@@ -21,16 +23,18 @@ function App() {
   }, [mode]);
   
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <StoreProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </StoreProvider>
   );
 }
 

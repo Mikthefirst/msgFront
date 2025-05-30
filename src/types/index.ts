@@ -1,26 +1,30 @@
 export interface User {
   id: string;
-  name: string;
-  username: string;
-  avatar: string;
+  username?: string;
+  nickname: string; // made optional
+  email: string;
+  full_name?: string; // made optional
+  avatar?: string; 
+  role: string;
+  createdAt: string;
+  updatedAt: string;
   status?: string;
-  lastSeen?: string;
-  isOnline?: boolean;
 }
 
 export interface Message {
   id: string;
-  senderId: string;
+  sender: User;
+  conversationId: string;
   content: string;
   timestamp: string;
   read: boolean;
-  type: 'text' | 'image' | 'file';
+  type: MessageType;
   fileUrl?: string;
+  avatar?: string;
 }
 
 export interface Conversation {
   id: string;
-  participants: User[];
   lastMessage?: Message;
   unreadCount: number;
   isGroup: boolean;
@@ -28,4 +32,13 @@ export interface Conversation {
   groupAvatar?: string;
 }
 
-export type ThemeMode = 'light' | 'dark';
+
+export enum MessageType {
+  text = "text",
+  status = "status",
+  code = "code",
+  file = "file",
+  image ="image"
+};
+
+export type ThemeMode = "light" | "dark";

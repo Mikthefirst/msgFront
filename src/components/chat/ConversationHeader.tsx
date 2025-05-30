@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { useChatStore } from '../../store/useChatStore';
+import { rootStore } from '../../store/RootStore';
 import Avatar from '../ui/Avatar';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PhoneCall, Video, MoreVertical } from 'lucide-react';
+import { observer } from 'mobx-react-lite';
 
-const ConversationHeader: React.FC = () => {
-  const { activeConversationId, conversations } = useChatStore();
-  
+const ConversationHeader: React.FC = observer(() => {
+  //const { activeConversationId, conversations } =  rootStore.conversationStore;
+  /*
   // Find the active conversation
   const activeConversation = conversations.find(conv => conv.id === activeConversationId);
   
@@ -33,7 +36,7 @@ const ConversationHeader: React.FC = () => {
     <div className="border-b border-gray-200 dark:border-gray-700 p-4 flex items-center">
       <Avatar
         src={avatar || ''}
-        alt={displayName}
+        alt={displayName||''}
         size="md"
         status={isOnline ? 'online' : undefined}
       />
@@ -57,7 +60,8 @@ const ConversationHeader: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
+  );*/
+  return (<div>Header</div>);
+});
 
 export default ConversationHeader;

@@ -1,20 +1,32 @@
+//MessageList.tsx
 import React, { useEffect, useRef } from 'react';
-import { useChatStore } from '../../store/useChatStore';
+import { observer } from "mobx-react-lite";
 import Avatar from '../ui/Avatar';
 import { formatMessageTime } from '../../utils/dateUtils';
 import { CheckCheck } from 'lucide-react';
+import { Message } from '../../types';
+import { useStore } from '../../store/StoreContext';
 
-const MessageList: React.FC = () => {
-  const { activeConversationId, messages } = useChatStore();
+const MessageList: React.FC = observer(() => {
+  const { chatStore, userStore } = useStore();
+  
+  const { activeConversationId } = chatStore;
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
-  const conversationMessages = activeConversationId ? messages[activeConversationId] || [] : [];
+  const conversationMessages:Message[] = chatStore.activeMessages;
+
+  useEffect(() => {
+    if (!chatStore.activeConversationId) return;
+    chatStore.fetchMessages();
+  }, [chatStore.activeConversationId])
   
+
   // Scroll to bottom whenever messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversationMessages]);
   
+  console.log('activeConversationId:', activeConversationId);
   if (!activeConversationId) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -28,44 +40,60 @@ const MessageList: React.FC = () => {
   return (
     <div className="p-4 overflow-y-auto flex-1">
       {conversationMessages.map((message, index) => {
-        const isCurrentUser = message.senderId === '1';
-        const showAvatar = !isCurrentUser && (index === 0 || conversationMessages[index - 1].senderId !== message.senderId);
+        const isCurrentUser = userStore.user ? message.sender.id === userStore.user.id || message.sender.id==='hardcoding': false;
+        const showAvatar = !isCurrentUser && (index === 0 || conversationMessages[index - 1].sender.id !== message.sender.id);
         
         return (
           <div
             key={message.id}
-            className={`flex mb-4 ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
+            className={`flex mb-4 ${
+              isCurrentUser ? "justify-end" : "justify-start"
+            }`}
           >
             {!isCurrentUser && showAvatar && (
               <div className="mr-2 flex-shrink-0">
                 <Avatar
-                  src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150"
+                  src={
+                    message.sender.avatar ||
+                    "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg"
+                  }
                   alt="User"
                   size="sm"
                 />
               </div>
             )}
-            
-            <div className={`max-w-[70%] ${!isCurrentUser && !showAvatar ? 'ml-8' : ''}`}>
+
+            <div
+              className={`max-w-[70%] ${
+                !isCurrentUser && !showAvatar ? "ml-8" : ""
+              }`}
+            >
               <div
                 className={`
                   p-3 rounded-lg
-                  ${isCurrentUser 
-                    ? 'bg-blue-500 text-white rounded-br-none' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none'
+                  ${
+                    isCurrentUser
+                      ? "bg-blue-500 text-white rounded-br-none"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none"
                   }
                 `}
               >
                 {message.content}
               </div>
-              
-              <div className={`flex items-center mt-1 text-xs text-gray-500 dark:text-gray-400 ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+
+              <div
+                className={`flex items-center mt-1 text-xs text-gray-500 dark:text-gray-400 ${
+                  isCurrentUser ? "justify-end" : "justify-start"
+                }`}
+              >
                 <span>{formatMessageTime(new Date(message.timestamp))}</span>
-                
+
                 {isCurrentUser && (
                   <span className="ml-1">
-                    <CheckCheck 
-                      className={`h-3 w-3 ${message.read ? 'text-blue-500' : ''}`}
+                    <CheckCheck
+                      className={`h-3 w-3 ${
+                        message.read ? "text-blue-500" : ""
+                      }`}
                     />
                   </span>
                 )}
@@ -78,6 +106,6 @@ const MessageList: React.FC = () => {
       <div ref={messagesEndRef} />
     </div>
   );
-};
+});
 
 export default MessageList;
