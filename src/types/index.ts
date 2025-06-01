@@ -99,4 +99,5 @@ export interface Group {
   };
   lastMessage?: MessagePreview;
   unreadCount: number;
+  description?: string;
 }
