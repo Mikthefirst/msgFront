@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import MainLayout from '../components/layout/MainLayout';
 import ConversationList from '../components/chat/ConversationList';
 import MessageList from '../components/chat/MessageList';
-import ChatInput from '../components/chat/ChatInput2';
+import ChatInput from '../components/chat/ChatInput'
 import ConversationHeader from '../components/chat/ConversationHeader';
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store/StoreContext";
