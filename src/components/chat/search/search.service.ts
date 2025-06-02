@@ -5,7 +5,8 @@ const server = "http://localhost:3000";
 
 export async function searchRoomsByName(term: string) {
   const response = await fetch(
-    `${server}/search/rooms/name?term=${encodeURIComponent(term)}`
+    `${server}/search/rooms/name?term=${encodeURIComponent(term)}`,
+    { credentials: "include" }
   );
   if (!response.ok)
     throw new Error(`Error searching rooms by name: ${response.status}`);
@@ -16,7 +17,7 @@ export async function searchRoomsByName(term: string) {
 
 export async function searchUsers(term: string) {
   const response = await fetch(
-    `${server}/search/users?term=${encodeURIComponent(term)}`
+    `${server}/search/users?term=${encodeURIComponent(term)}`, {credentials: 'include'}
   );
   if (!response.ok)
     throw new Error(`Error searching users: ${response.status}`);
@@ -47,12 +48,29 @@ export async function createChat(dto: { user2Id: string }) {
   const response = await fetch(`${server}/conversations/direct`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", credentials: 'include'
     },
+    
     body: JSON.stringify(dto),
   });
 
   if (!response.ok) throw new Error("Failed to create chat");
 
   return response.json();
+}
+
+
+export async function joinGroup(dto: { conversationId: string }) {
+  const response = await fetch(`${server}/conversations/join-group`, {
+    method: "POST",
+    credentials:'include',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dto),
+  });
+
+  if (!response.ok) throw new Error("Failed to join group");
+
+  return await response.json();
 }

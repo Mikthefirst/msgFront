@@ -77,11 +77,10 @@ const ConversationList: React.FC = observer(() => {
               }`}
               onClick={() => onClickConversation(conversation.id)}
             >
-              <Avatar
-                src={avatar}
+              <img
+                src={`http://localhost:3000/image-service/get-conversation-avatar/${conversation.id}`}
                 alt={displayName}
-                size="md"
-                status={isOnline ? "online" : "away"}
+                className="w-10 h-10 rounded-full object-cover border border-gray-300"
               />
 
               <div className="ml-3 flex-1 min-w-0">

@@ -1,16 +1,25 @@
 import { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import debounce from "lodash.debounce";
-import { search } from "./search.service";
+import { joinGroup, search } from "./search.service";
 import { createChat } from "./search.service";
 import { SearchResultItem } from "./SearchResultItem";
 import { useStore } from "../../../store/StoreContext";
 
+interface SearchResult {
+  id: string;
+  nickname?: string;
+  username?: string;
+  group_nickname?: string;
+  groupName?: string;
+  groupAvatar?: string;
+}
+
 const ConversationSearch: React.FC = observer(() => {
   const [term, setTerm] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
-  const { userStore } = useStore(); // ✅ получаем userStore из контекста
+  const { userStore, conversationStore } = useStore(); 
   const { user } = userStore;
 
   const debouncedSearch = debounce(async (input: string) => {
@@ -32,21 +41,38 @@ const ConversationSearch: React.FC = observer(() => {
     return () => debouncedSearch.cancel();
   }, [term]);
 
+  useEffect(() => {
+    if (term.trim() === "") {
+      setResults([]);
+    }
+  }, [term]);
+
   const handleClick = async (item: any) => {
     if (!user) return;
 
     if (item.nickname?.startsWith("@")) {
+      // direct message
       try {
         const chat = await createChat({ user2Id: item.id });
         console.log("Чат создан:", chat);
-        // Можно добавить редирект в чат
+        conversationStore.setActiveConversation(chat.id); 
+        await conversationStore.fetchConversations(); 
+
       } catch (err) {
         console.log("Ошибка создания чата:", err);
       }
-    } else {
-      console.log("Открыть группу:", item);
+    } else if (item.group_nickname?.startsWith("$")) {
+      // group
+      try {
+        const group = await joinGroup({ conversationId: item.id });
+        conversationStore.setActiveConversation(group.id);
+        await conversationStore.fetchConversations(); 
+      } catch (err) {
+        console.log("Ошибка входа в группу:", err);
+      }
     }
   };
+  
 
   return (
     <div className="p-4">
@@ -64,9 +90,18 @@ const ConversationSearch: React.FC = observer(() => {
       )}
 
       <ul>
-        {results.map((item) => (
-          <SearchResultItem item={item} onClick={handleClick} term={term} />
-        ))}
+        {results.length > 0 && (
+          <ul>
+            {results.map((item) => (
+              <SearchResultItem
+                key={item.id}
+                item={item}
+                onClick={handleClick}
+                term={term}
+              />
+            ))}
+          </ul>
+        )}
       </ul>
     </div>
   );

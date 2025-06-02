@@ -17,7 +17,6 @@ export class ConversationStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
 
-
     webSocketManager.onMessage((data) => {
       if (data.action === "new-message") {
         this.handleIncomingMessage(data.message);
@@ -35,6 +34,10 @@ export class ConversationStore {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  async reloadConversations() {
+    await this.fetchConversations();
   }
 
   // Метод, который явно отправляет событие 'join-room' на сервер
