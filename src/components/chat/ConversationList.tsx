@@ -1,24 +1,22 @@
-//ConversationList.tsx
 import React, { useMemo, useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store/StoreContext";
-import { Search, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Avatar from "../ui/Avatar";
 import { formatDistanceToNow } from "../../utils/dateUtils";
 import { Conversation } from "../../types";
 import { useNavigate } from "react-router-dom";
+import ConversationSearch from "./search/ConversationSearch"; // ⬅️ новый импорт
 
 const ConversationList: React.FC = observer(() => {
   const navigate = useNavigate();
-
   const { conversationStore } = useStore();
-  const { conversations, activeConversationId } =
-    conversationStore;
-    
+  const { conversations, activeConversationId } = conversationStore;
+
   const onClickConversation = (id: string) => {
-      conversationStore.setActiveConversation(id);
-    };
-  
+    conversationStore.setActiveConversation(id);
+  };
+
   useEffect(() => {
     conversationStore.fetchConversations();
     conversationStore.conversations = conversationStore.conversations.map(
@@ -51,18 +49,7 @@ const ConversationList: React.FC = observer(() => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search conversations..."
-            className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div>
+      <ConversationSearch />
 
       <div className="flex items-center justify-between p-4">
         <h2 className="font-semibold text-gray-900 dark:text-white">
@@ -90,11 +77,10 @@ const ConversationList: React.FC = observer(() => {
               }`}
               onClick={() => onClickConversation(conversation.id)}
             >
-              <Avatar
-                src={avatar}
+              <img
+                src={`http://localhost:3000/image-service/get-conversation-avatar/${conversation.id}`}
                 alt={displayName}
-                size="md"
-                status={isOnline ? "online" : "away"}
+                className="w-10 h-10 rounded-full object-cover border border-gray-300"
               />
 
               <div className="ml-3 flex-1 min-w-0">

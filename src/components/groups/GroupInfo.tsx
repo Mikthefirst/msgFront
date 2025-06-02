@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Clock, User, Users } from 'lucide-react';
+import { Clock, FileText, User, Users } from 'lucide-react';
 import Button from '../ui/Button';
 import { Group } from '../../types';
 import { formatDateNormal } from "../../utils/dateUtils";
@@ -80,6 +80,18 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
                   </p>
                 </div>
               </div>
+
+              {group.description && (
+                <div className="flex items-start">
+                  <FileText className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
+                  <div>
+                    <p className="text-sm font-medium">Description</p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      {group.description}
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-start">
                 <Users className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />

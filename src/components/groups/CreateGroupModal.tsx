@@ -13,6 +13,7 @@ interface Props {
 const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
   const [groupName, setGroupName] = useState("");
   const [groupNickname, setGroupNickname] = useState("");
+  const [groupDescription, setGroupDescription] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [users, setUsers] = useState<UserOption[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -44,6 +45,7 @@ const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
     const formData = new FormData();
     formData.append("groupName", groupName);
     formData.append("groupNickname", groupNickname);
+    formData.append("description", groupDescription);
     if (avatarFile) {
       formData.append("avatar", avatarFile); // ключ "avatar" должен совпадать с тем, что принимает FileInterceptor
     }
@@ -87,6 +89,14 @@ const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
           placeholder="Group Nickname"
           value={groupNickname}
           onChange={(e) => setGroupNickname(e.target.value)}
+          className="w-full mb-2 p-2 border rounded text-black dark:text-white bg-white dark:bg-gray-800"
+        />
+
+        <input
+          type="text"
+          placeholder="Group Nickname"
+          value={groupDescription}
+          onChange={(e) => setGroupDescription(e.target.value)}
           className="w-full mb-2 p-2 border rounded text-black dark:text-white bg-white dark:bg-gray-800"
         />
 
