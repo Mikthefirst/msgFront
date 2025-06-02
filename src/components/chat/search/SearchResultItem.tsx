@@ -1,4 +1,5 @@
 import React from "react";
+import AvatarWithFallback from "../../ui/AvatarWithFallback";
 
 interface SearchResultItemProps {
   item: any;
@@ -34,10 +35,10 @@ export const SearchResultItem = ({
       className="cursor-pointer hover:bg-gray-100 p-2 rounded flex items-center gap-3"
     >
       {isGroup && item.groupAvatar && (
-        <img
+        <AvatarWithFallback
           src={`http://localhost:3000/image-service/get-conversation-avatar/${item.id}`}
           alt={item.groupName}
-          className="w-10 h-10 rounded-full object-cover border border-gray-300"
+          size={40}
         />
       )}
       <div>

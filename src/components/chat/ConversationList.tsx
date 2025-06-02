@@ -2,11 +2,11 @@ import React, { useMemo, useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store/StoreContext";
 import { Plus } from "lucide-react";
-import Avatar from "../ui/Avatar";
 import { formatDistanceToNow } from "../../utils/dateUtils";
 import { Conversation } from "../../types";
 import { useNavigate } from "react-router-dom";
 import ConversationSearch from "./search/ConversationSearch"; // ⬅️ новый импорт
+import AvatarWithFallback from "../ui/AvatarWithFallback";
 
 const ConversationList: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -64,8 +64,6 @@ const ConversationList: React.FC = observer(() => {
         {sortedConversations.map((conversation: Conversation) => {
           const isActive = activeConversationId === conversation.id;
           const displayName = conversation.groupName || "Unnamed Group";
-          const avatar = conversation.groupAvatar || "";
-          const isOnline = false;
 
           return (
             <div
@@ -77,10 +75,10 @@ const ConversationList: React.FC = observer(() => {
               }`}
               onClick={() => onClickConversation(conversation.id)}
             >
-              <img
+              <AvatarWithFallback
                 src={`http://localhost:3000/image-service/get-conversation-avatar/${conversation.id}`}
                 alt={displayName}
-                className="w-10 h-10 rounded-full object-cover border border-gray-300"
+                size={40}
               />
 
               <div className="ml-3 flex-1 min-w-0">
