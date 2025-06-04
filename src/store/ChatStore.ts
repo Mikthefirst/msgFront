@@ -1,3 +1,4 @@
+import { msgType } from 'src/enums/msg.enum';
 // stores/ChatStore.ts
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./RootStore";
@@ -6,8 +7,7 @@ import ChatService from "./services/ChatService";
 
 export class ChatStore {
   rootStore: RootStore;
-  chatService = new ChatService();
-
+  chatService: ChatService;
   messages: Record<string, Message[]> = {};
   activeConversationId: string | null = null;
   isLoading = false;
@@ -15,6 +15,7 @@ export class ChatStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    this.chatService = new ChatService(this.rootStore.server);
     makeAutoObservable(this);
   }
 
@@ -83,6 +84,14 @@ export class ChatStore {
       console.log(e);
       this.error = String(e);
     }
+  };
+  sendFile = async (
+    conversationId: string,
+    file: File,
+    name:string, type: msgType
+  ) => {
+    await this.chatService.sendFileMessage(conversationId, file, name, type);
+    this.fetchMessages();
   };
 
   async markAsRead(conversationId: string, messageId: string) {

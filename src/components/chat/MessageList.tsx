@@ -8,6 +8,7 @@ import { Message } from '../../types';
 import { useStore } from '../../store/StoreContext';
 import CodeRenderer from './render/CodeRenderer';
 import StatusDisplay from './render/StatusDisplay';
+import FileMessageRenderer from './render/FileMessageRenderer';
 
 const MessageList: React.FC = observer(() => {
   const { chatStore, userStore } = useStore();
@@ -71,11 +72,22 @@ const MessageList: React.FC = observer(() => {
               }`}
             >
               <div
-                className={`p-3 rounded-lg${isCurrentUser? "bg-blue-500 text-white rounded-br-none": "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none"}`}>
+                className={`p-3 rounded-lg${
+                  isCurrentUser
+                    ? "bg-blue-500 text-white rounded-br-none"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none"
+                }`}
+              >
                 {message.type === "code" ? (
                   <CodeRenderer content={message.content} />
                 ) : message.type === "status" ? (
                   <StatusDisplay statusData={JSON.parse(message.content)} />
+                ) : message.type === "file" || message.type === "image" ? (
+                  <FileMessageRenderer
+                    fileName={message.content}
+                    fileUrl={message.fileUrl!}
+                    isImage={message.type === "image"}
+                  />
                 ) : (
                   message.content
                 )}

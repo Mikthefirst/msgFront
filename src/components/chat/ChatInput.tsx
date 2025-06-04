@@ -28,7 +28,7 @@ const ChatInput: React.FC = observer(() => {
   const [statusFields, setStatusFields] = useState<Record<string, string>>({});
   const [fileMessage, setFileMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { activeConversationId, sendMessage, sendStatus } = chatStore;
+  const { activeConversationId, sendMessage, sendStatus, sendFile } = chatStore;
 
   const handleSendMessage = () => {
     if (
@@ -59,13 +59,8 @@ const ChatInput: React.FC = observer(() => {
       (messageType === MessageType.file || messageType === MessageType.image) &&
       selectedFile
     ) {
-      /*const displayName = fileMessage || selectedFile.name;
-      sendFileMessage(
-        activeConversationId,
-        selectedFile,
-        displayName,
-        messageType
-      );*/
+      const displayName = fileMessage || selectedFile.name;
+      sendFile(activeConversationId, selectedFile, displayName, messageType);
     }
 
     // === RESET ===

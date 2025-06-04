@@ -1,8 +1,13 @@
 // services/ChatService.ts
-import { Message } from "../../types";
+import { Message, MessageType } from "../../types";
 import webSocketManager from "../../ws/WebSocketManager";
 
 export default class ChatService {
+  server: string;
+  constructor(server:string) {
+    this.server = server;
+  }
+
   async fetchMessages(conversationId: string): Promise<Message[]> {
     const res = await fetch(
       `http://localhost:3000/messages/${conversationId}`,
@@ -49,6 +54,35 @@ export default class ChatService {
     } catch (e) {
       console.error(e);
     }
+  }
+  async sendFileMessage(
+    conversationId: string,
+    file: File,
+    displayName: string,
+    type: MessageType
+  ) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch(
+      `http://localhost:3000/image-service/upload-message-file/${conversationId}`, // или свой upload endpoint
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      }
+    );
+
+    if (!res.ok) throw new Error("Failed to upload file");
+
+    const { url } = await res.json();
+
+    webSocketManager.sendMessage("send-message-file", {
+      conversationId,
+      content: displayName,
+      fileUrl: url,
+      type,
+    });
   }
 
   async markMessageAsRead(
