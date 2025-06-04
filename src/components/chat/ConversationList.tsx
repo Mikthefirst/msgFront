@@ -29,6 +29,31 @@ const ConversationList: React.FC = observer(() => {
   }, [conversationStore]);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false); // 👈 state для isAdmin
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/admin/is-admin",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const isAdminResult = await response.json();
+          setIsAdmin(isAdminResult === true);
+        }
+      } catch (error) {
+        console.error("Ошибка при проверке администратора", error);
+      }
+    };
+
+    checkAdmin();
+  }, []);
+
 
   const filteredConversations = useMemo(() => {
     if (!searchQuery.trim()) return conversations;
@@ -112,6 +137,16 @@ const ConversationList: React.FC = observer(() => {
           );
         })}
       </div>
+      {isAdmin && (
+        <div className="p-4">
+          <button
+            onClick={() => navigate("/admin")}
+            className="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Панель администратора
+          </button>
+        </div>
+      )}
     </div>
   );
 });

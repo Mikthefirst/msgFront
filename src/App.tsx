@@ -9,6 +9,8 @@ import { StoreProvider } from "./store/StoreContext";
 import GroupsPage from './pages/GroupsPage';
 import UserProfile from './pages/Profile/UserProfile';
 import UserProfileView from './pages/Profile/UserProfileView';
+import { ToastProvider } from './components/admin copy/ui/Toast';
+import AdminPage from './components/admin copy/AdminPage';
 
 
 
@@ -26,18 +28,21 @@ function App() {
   
   return (
     <StoreProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/profile/:id" element={<UserProfileView />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-          <Route path="/group" element={<GroupsPage />} />
-        </Routes>
-      </Router>
+      <ToastProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/profile/:id" element={<UserProfileView />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/group" element={<GroupsPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+          </Routes>
+        </Router>
+      </ToastProvider>
     </StoreProvider>
   );
 }
