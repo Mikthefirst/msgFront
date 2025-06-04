@@ -28,39 +28,54 @@ const ChatInput: React.FC = observer(() => {
   const [statusFields, setStatusFields] = useState<Record<string, string>>({});
   const [fileMessage, setFileMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { activeConversationId, sendMessage } = chatStore;
+  const { activeConversationId, sendMessage, sendStatus } = chatStore;
 
   const handleSendMessage = () => {
     if (
       (!message.trim() && !selectedFile && messageType !== "status") ||
       !activeConversationId
-    )
-      return;
-
-    let finalMessage = message;
-
-    if (messageType === "status") {
-      finalMessage = `Status Update:\n${Object.entries(statusFields)
-        .map(([title, text]) => `${title}: ${text}`)
-        .join("\n")}`;
-    } else if (messageType === "code") {
-      finalMessage = `\`\`\`${codeLanguage}\n${message}\n\`\`\``;
-    } else if (
-      (messageType === "file" || messageType === "image") &&
-      selectedFile
     ) {
-      finalMessage = fileMessage || selectedFile.name;
+      return;
     }
 
-    sendMessage(activeConversationId, finalMessage, messageType);
+    // === TEXT ===
+    if (messageType === MessageType.text) {
+      sendMessage(activeConversationId, message.trim(), MessageType.text);
+    }
 
-    // Reset
+    // === CODE ===
+    else if (messageType === MessageType.code) {
+      const codeFormatted = `\`\`\`${codeLanguage}\n${message.trim()}\n\`\`\``;
+      sendMessage(activeConversationId, codeFormatted, MessageType.code);
+    }
+
+    // === STATUS ===
+    else if (messageType === MessageType.status) {
+      sendStatus(activeConversationId, statusFields); // отправляем сырой объект
+    }
+
+    // === IMAGE / FILE ===
+    else if (
+      (messageType === MessageType.file || messageType === MessageType.image) &&
+      selectedFile
+    ) {
+      /*const displayName = fileMessage || selectedFile.name;
+      sendFileMessage(
+        activeConversationId,
+        selectedFile,
+        displayName,
+        messageType
+      );*/
+    }
+
+    // === RESET ===
     setMessage("");
     setSelectedFile(null);
     setMessageType(MessageType.text);
     setStatusFields({});
     setFileMessage("");
   };
+  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {

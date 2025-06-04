@@ -1,7 +1,7 @@
 // stores/ChatStore.ts
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./RootStore";
-import { Message,  } from "../types";
+import { Message, MessageType,  } from "../types";
 import ChatService from "./services/ChatService";
 
 export class ChatStore {
@@ -56,7 +56,13 @@ export class ChatStore {
       console.log("empty conv_id field");
     }
   }
-
+  sendStatus = async (
+    conversationId: string,
+    statusData: Record<string, string>
+  ) => {
+    await this.chatService.sendMessageSTATUS(conversationId, statusData);
+    this.fetchMessages();
+  };
   sendMessage = async (
     conversationId: string,
     content: string,
@@ -66,8 +72,11 @@ export class ChatStore {
       console.log("chat Store:", conversationId, "\n", content, "\n", type);
       if (type === "text") {
         await this.chatService.sendMessageTEXT(conversationId, content);
+      } else if (type === MessageType.code) {
+        await this.chatService.sendMessageCODE(conversationId, content);
       }
 
+      this.fetchMessages();
       // УБРАНО: локальное добавление сообщения
       // Оно теперь будет приходить через WebSocket ("new-message")
     } catch (e) {

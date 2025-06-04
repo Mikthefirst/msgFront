@@ -6,6 +6,8 @@ import { formatMessageTime } from '../../utils/dateUtils';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '../../types';
 import { useStore } from '../../store/StoreContext';
+import CodeRenderer from './render/CodeRenderer';
+import StatusDisplay from './render/StatusDisplay';
 
 const MessageList: React.FC = observer(() => {
   const { chatStore, userStore } = useStore();
@@ -69,16 +71,14 @@ const MessageList: React.FC = observer(() => {
               }`}
             >
               <div
-                className={`
-                  p-3 rounded-lg
-                  ${
-                    isCurrentUser
-                      ? "bg-blue-500 text-white rounded-br-none"
-                      : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none"
-                  }
-                `}
-              >
-                {message.content}
+                className={`p-3 rounded-lg${isCurrentUser? "bg-blue-500 text-white rounded-br-none": "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none"}`}>
+                {message.type === "code" ? (
+                  <CodeRenderer content={message.content} />
+                ) : message.type === "status" ? (
+                  <StatusDisplay statusData={JSON.parse(message.content)} />
+                ) : (
+                  message.content
+                )}
               </div>
 
               <div

@@ -3,8 +3,6 @@ import { Message } from "../../types";
 import webSocketManager from "../../ws/WebSocketManager";
 
 export default class ChatService {
-
-
   async fetchMessages(conversationId: string): Promise<Message[]> {
     const res = await fetch(
       `http://localhost:3000/messages/${conversationId}`,
@@ -23,6 +21,33 @@ export default class ChatService {
       });
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  async sendMessageCODE(conversationId: string, content: string) {
+    try {
+      console.log("send-msg-code");
+      webSocketManager.sendMessage("send-message-code", {
+        conversationId,
+        content,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async sendMessageSTATUS(
+    conversationId: string,
+    statusData: Record<string, string>
+  ) {
+    try {
+      console.log("send-msg-status");
+      const content = JSON.stringify(statusData);
+      webSocketManager.sendMessage("send-message-status", {
+        conversationId,
+        content,
+      });
+    } catch (e) {
+      console.error(e);
     }
   }
 
