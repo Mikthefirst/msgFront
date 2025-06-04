@@ -4,11 +4,12 @@ import { observer } from "mobx-react-lite";
 import Avatar from '../ui/Avatar';
 import { formatMessageTime } from '../../utils/dateUtils';
 import { CheckCheck } from 'lucide-react';
-import { Message } from '../../types';
+import { Message,  } from '../../types';
 import { useStore } from '../../store/StoreContext';
 import CodeRenderer from './render/CodeRenderer';
 import StatusDisplay from './render/StatusDisplay';
 import FileMessageRenderer from './render/FileMessageRenderer';
+import VoiceMessageRenderer from './render/VoiceMessageRenderer';
 
 const MessageList: React.FC = observer(() => {
   const { chatStore, userStore } = useStore();
@@ -88,6 +89,8 @@ const MessageList: React.FC = observer(() => {
                     fileUrl={message.fileUrl!}
                     isImage={message.type === "image"}
                   />
+                ) : message.type === "voice" && message.fileUrl ? (
+                  <VoiceMessageRenderer fileUrl={message.fileUrl} />
                 ) : (
                   message.content
                 )}

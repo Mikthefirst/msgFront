@@ -49,7 +49,8 @@ export enum MessageType {
   status = "status",
   code = "code",
   file = "file",
-  image ="image"
+  image = "image",
+  voice = "voice"
 };
 
 export type ThemeMode = "light" | "dark";

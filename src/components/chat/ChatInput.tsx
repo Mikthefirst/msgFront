@@ -9,6 +9,7 @@ import {
   Image,
   FileText,
   MessageSquare,
+  Mic,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store/StoreContext";
@@ -29,6 +30,54 @@ const ChatInput: React.FC = observer(() => {
   const [fileMessage, setFileMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { activeConversationId, sendMessage, sendStatus, sendFile } = chatStore;
+
+
+  //voice recording
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
+  
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      recordedChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          recordedChunksRef.current.push(e.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunksRef.current, {
+          type: "audio/webm",
+        });
+        setRecordedBlob(blob);
+        setMessageType(MessageType.voice);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error("Microphone access denied", err);
+    }
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    setIsRecording(false);
+  };
+
+  const cancelRecording = () => {
+    setRecordedBlob(null);
+    setIsRecording(false);
+    setMessageType(MessageType.text);
+  };
+  
+
 
   const handleSendMessage = () => {
     if (
@@ -62,6 +111,17 @@ const ChatInput: React.FC = observer(() => {
       const displayName = fileMessage || selectedFile.name;
       sendFile(activeConversationId, selectedFile, displayName, messageType);
     }
+    else if (messageType === MessageType.voice && recordedBlob) {
+      const voiceFile = new File([recordedBlob], "voice-message.webm", {
+        type: "audio/webm",
+      });
+      sendFile(
+        activeConversationId,
+        voiceFile,
+        "Voice message",
+        MessageType.voice
+      );
+    }
 
     // === RESET ===
     setMessage("");
@@ -79,21 +139,32 @@ const ChatInput: React.FC = observer(() => {
     }
   };
 
-  const handleFileSelect = (type: "file" | "image") => {
+  const handleFileSelect = (type: "file" | "image"|"voice") => {
     if (fileInputRef.current) {
-      fileInputRef.current.accept = type === "image" ? "image/*" : "*/*";
+      if (type === "image") {
+        fileInputRef.current.accept = "image/*";
+      } else if (type === "voice") {
+        fileInputRef.current.accept = "audio/*";
+      } else {
+        fileInputRef.current.accept = "*/*";
+      }
       fileInputRef.current.click();
-    }
+    }    
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.type.startsWith("image/")) {
+        setMessageType(MessageType.image);
+      } else if (file.type.startsWith("audio/")) {
+        setMessageType(MessageType.voice);
+      } else {
+        setMessageType(MessageType.file);
+      }
       setSelectedFile(file);
-      setMessageType(
-        file.type.startsWith("image/") ? MessageType.image : MessageType.file
-      );
     }
+    
   };
 
   if (!activeConversationId) return null;
@@ -192,6 +263,17 @@ const ChatInput: React.FC = observer(() => {
                   <button
                     className="flex items-center w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                     onClick={() => {
+                      startRecording();
+                      setShowTypeMenu(false);
+                    }}
+                  >
+                    <Mic className="h-4 w-4 mr-2" />
+                    <span>Voice message</span>
+                  </button>
+
+                  <button
+                    className="flex items-center w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                    onClick={() => {
                       handleFileSelect("image");
                       setShowTypeMenu(false);
                     }}
@@ -223,6 +305,33 @@ const ChatInput: React.FC = observer(() => {
               </div>
             )}
           </div>
+          {messageType === MessageType.voice && recordedBlob && (
+            <div className="mb-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-between">
+              <audio
+                controls
+                src={URL.createObjectURL(recordedBlob)}
+                className="mr-2"
+              />
+              <button
+                onClick={cancelRecording}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+
+          {isRecording && (
+            <div className="mb-2 flex items-center gap-2 text-red-500 font-medium">
+              Recording...
+              <button
+                onClick={stopRecording}
+                className="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded"
+              >
+                Stop
+              </button>
+            </div>
+          )}
 
           <div className="flex-1 mx-2">
             <textarea
@@ -242,7 +351,8 @@ const ChatInput: React.FC = observer(() => {
                 messageType === "file" ||
                 messageType === "image" ||
                 messageType === "status" ||
-                messageType === "code"
+                messageType === "code" ||
+                messageType === "voice"
               }
             />
           </div>
@@ -251,7 +361,7 @@ const ChatInput: React.FC = observer(() => {
             className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSendMessage}
             disabled={
-              !message.trim() && !selectedFile && messageType !== "status"
+              !message.trim() && !selectedFile && messageType !== "status" &&messageType!=="voice"
             }
             aria-label="Send message"
           >
