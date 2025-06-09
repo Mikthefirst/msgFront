@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); 
 interface UserOption {
   id: string;
   username: string;
@@ -20,7 +21,7 @@ const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
 
   useEffect(() => {
     // Загрузка списка пользователей для чекбоксов
-    fetch("http://localhost:3000/conversations/direct-users", {
+    fetch(`${server}/conversations/direct-users`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -54,7 +55,7 @@ const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
 
     try {
       const res = await fetch(
-        "http://localhost:3000/conversations/create-group",
+        `${server}/conversations/create-group`,
         {
           method: "POST",
           credentials: "include",
@@ -94,7 +95,7 @@ const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
 
         <input
           type="text"
-          placeholder="Group Nickname"
+          placeholder="Group Description"
           value={groupDescription}
           onChange={(e) => setGroupDescription(e.target.value)}
           className="w-full mb-2 p-2 border rounded text-black dark:text-white bg-white dark:bg-gray-800"

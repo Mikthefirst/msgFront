@@ -1,6 +1,6 @@
 // services/search.service.ts
 
-const server = "http://localhost:3000";
+const server = import.meta.env.SERVER_URL;
 
 
 export async function searchRoomsByName(term: string) {

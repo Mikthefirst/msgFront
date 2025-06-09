@@ -5,8 +5,10 @@ import { Group } from "../index";
 import { formatDateNormal } from "../../../utils/dateUtils";
 import {
   fetchMemberCount,
-  server,
 } from "../groupsService";
+
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); // должно быть http://localhost:3000
 
 interface GroupInfoProps {
   group: Group;

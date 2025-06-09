@@ -1,4 +1,7 @@
-export const server = "http://localhost:3000";
+//export const server = "http://localhost:3000";
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); // должно быть http://localhost:3000
+
 export const fetchUserGroups = async () => {
   try {
     const response = await fetch(`${server}/admin/groups`, {credentials: "include"});

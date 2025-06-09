@@ -63,7 +63,7 @@ export default class ChatService {
   ) {
     const formData = new FormData();
     formData.append("file", file);
-
+    console.log('send file', type)
     const res = await fetch(
       `http://localhost:3000/image-service/upload-message-file/${conversationId}`, // или свой upload endpoint
       {

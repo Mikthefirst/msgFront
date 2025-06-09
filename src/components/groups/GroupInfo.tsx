@@ -4,6 +4,12 @@ import Button from '../ui/Button';
 import { Group } from '../../types';
 import { formatDateNormal } from "../../utils/dateUtils";
 import { fetchMemberCount } from '../../store/services/groupsService';
+
+
+
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); // должно быть http://localhost:3000
+
 interface GroupInfoProps {
   group: Group;
   onLeaveGroup: () => void;
@@ -34,7 +40,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
         <div className="flex flex-col items-center text-center mb-8">
           {group.groupAvatar ? (
             <img
-              src={`http://localhost:3000/image-service/get-conversation-avatar/${group.id}`}
+              src={`${server}/image-service/get-conversation-avatar/${group.id}`}
               alt={group.groupName}
               className="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-md mb-4"
             />

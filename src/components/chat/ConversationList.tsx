@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import ConversationSearch from "./search/ConversationSearch"; // ⬅️ новый импорт
 import AvatarWithFallback from "../ui/AvatarWithFallback";
 
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); // должно быть http://localhost:3000
+
 const ConversationList: React.FC = observer(() => {
   const navigate = useNavigate();
   const { conversationStore } = useStore();
@@ -34,13 +37,10 @@ const ConversationList: React.FC = observer(() => {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/admin/is-admin",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${server}/admin/is-admin`, {
+          method: "GET",
+          credentials: "include",
+        });
 
         if (response.ok) {
           const isAdminResult = await response.json();
@@ -101,7 +101,7 @@ const ConversationList: React.FC = observer(() => {
               onClick={() => onClickConversation(conversation.id)}
             >
               <AvatarWithFallback
-                src={`http://localhost:3000/image-service/get-conversation-avatar/${conversation.id}`}
+                src={`${server}/image-service/get-conversation-avatar/${conversation.id}`}
                 alt={displayName}
                 size={40}
               />

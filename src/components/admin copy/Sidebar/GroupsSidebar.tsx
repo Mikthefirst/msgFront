@@ -1,6 +1,8 @@
 import React, {  } from "react";
 import { Users } from "lucide-react";
 import { Group } from "../index";
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); // должно быть http://localhost:3000
 
 interface GroupsSidebarProps {
   groups: Group[];
@@ -66,7 +68,7 @@ const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
                 <div className="relative">
                   {group.groupAvatar ? (
                     <img
-                      src={`http://localhost:3000/image-service/get-conversation-avatar/${group.id}`}
+                      src={`${server}/image-service/get-conversation-avatar/${group.id}`}
                       alt={group.groupName}
                       className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600"
                     />

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import UsersSidebar from './Sidebar/UsersSidebar';
 import UserInfo from './InfoPanels/UserInfo';
 import { User } from '../../types';
-import { server } from './groupsService';
+const server = import.meta.env.VITE_SERVER_URL;
+console.log(server); // должно быть http://localhost:3000
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);

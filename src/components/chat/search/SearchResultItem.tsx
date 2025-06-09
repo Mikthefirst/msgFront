@@ -1,6 +1,6 @@
 import React from "react";
 import AvatarWithFallback from "../../ui/AvatarWithFallback";
-
+const server = import.meta.env.SERVER_URL;
 interface SearchResultItemProps {
   item: any;
   onClick: (item: any) => void;
@@ -36,7 +36,7 @@ export const SearchResultItem = ({
     >
       {isGroup && item.groupAvatar && (
         <AvatarWithFallback
-          src={`http://localhost:3000/image-service/get-conversation-avatar/${item.id}`}
+          src={`${server}/image-service/get-conversation-avatar/${item.id}`}
           alt={item.groupName}
           size={40}
         />

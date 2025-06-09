@@ -7,6 +7,8 @@ import {
   Eye,
   XCircle,
 } from "lucide-react";
+export const server = import.meta.env.SERVER_URL;
+
 
 interface FileMessageRendererProps {
   fileName: string;
@@ -46,7 +48,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
       {/* Render Image or File block */}
       {isImage ? (
         <img
-          src={`http://localhost:3000${fileUrl}`}
+          src={`${server}${fileUrl}`}
           alt={fileName}
           className="rounded-lg max-h-60 object-contain mb-2 border"
         />
@@ -68,7 +70,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
 
       <div className="flex gap-4 items-center mt-1">
         <a
-          href={`http://localhost:3000${fileUrl}`}
+          href={`${server}${fileUrl}`}
           target="_blank"
           rel="noopener noreferrer"
           download
@@ -100,7 +102,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
               <XCircle className="w-6 h-6" />
             </button>
             <iframe
-              src={`http://localhost:3000${fileUrl}`}
+              src={`${server}${fileUrl}`}
               className="w-full h-full border-none"
               title="PDF Preview"
             ></iframe>

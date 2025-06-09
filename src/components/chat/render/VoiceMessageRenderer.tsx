@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { Play, Pause } from "lucide-react";
-
+const server = import.meta.env.SERVER_URL;
 interface VoiceMessageRendererProps {
   fileUrl: string;
 }
@@ -30,7 +30,7 @@ const VoiceMessageRenderer: React.FC<VoiceMessageRendererProps> = ({
       normalize: true,
     });
 
-    wavesurferRef.current.load(`http://localhost:3000${fileUrl}`);
+    wavesurferRef.current.load(`${server}${fileUrl}`);
 
     wavesurferRef.current.on("ready", () => {
       setDuration(wavesurferRef.current?.getDuration() || 0);

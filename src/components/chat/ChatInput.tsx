@@ -115,6 +115,7 @@ const ChatInput: React.FC = observer(() => {
       const voiceFile = new File([recordedBlob], "voice-message.webm", {
         type: "audio/webm",
       });
+      console.log("send VOice msg")
       sendFile(
         activeConversationId,
         voiceFile,
