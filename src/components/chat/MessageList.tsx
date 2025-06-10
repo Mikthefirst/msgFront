@@ -1,36 +1,33 @@
-//MessageList.tsx
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import Avatar from '../ui/Avatar';
-import { formatMessageTime } from '../../utils/dateUtils';
-import { CheckCheck } from 'lucide-react';
-import { Message,  } from '../../types';
-import { useStore } from '../../store/StoreContext';
-import CodeRenderer from './render/CodeRenderer';
-import StatusDisplay from './render/StatusDisplay';
-import FileMessageRenderer from './render/FileMessageRenderer';
-import VoiceMessageRenderer from './render/VoiceMessageRenderer';
+import Avatar from "../ui/Avatar";
+import { formatMessageTime } from "../../utils/dateUtils";
+import { CheckCheck } from "lucide-react";
+import { Message } from "../../types";
+import { useStore } from "../../store/StoreContext";
+import CodeRenderer from "./render/CodeRenderer";
+import StatusDisplay from "./render/StatusDisplay";
+import FileMessageRenderer from "./render/FileMessageRenderer";
+import VoiceMessageRenderer from "./render/VoiceMessageRenderer";
 
 const MessageList: React.FC = observer(() => {
   const { chatStore, userStore } = useStore();
-  
-  const { activeConversationId } = chatStore;
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  
-  const conversationMessages:Message[] = chatStore.activeMessages;
 
+  const activeConversationId = chatStore.activeConversationId;
+  const conversationMessages: Message[] = chatStore.activeMessages;
+
+  // Fetch messages when active conversation changes
   useEffect(() => {
-    if (!chatStore.activeConversationId) return;
+    if (!activeConversationId) return;
     chatStore.fetchMessages();
-  }, [chatStore.activeConversationId])
-  
+  }, [activeConversationId]);
 
-  // Scroll to bottom whenever messages change
+  // Scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [conversationMessages]);
-  
-  console.log('activeConversationId:', activeConversationId);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [conversationMessages.length]);
+
   if (!activeConversationId) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -40,13 +37,20 @@ const MessageList: React.FC = observer(() => {
       </div>
     );
   }
-  
+
   return (
     <div className="p-4 overflow-y-auto flex-1">
       {conversationMessages.map((message, index) => {
-        const isCurrentUser = userStore.user ? message.sender.id === userStore.user.id || message.sender.id==='hardcoding': false;
-        const showAvatar = !isCurrentUser && (index === 0 || conversationMessages[index - 1].sender.id !== message.sender.id);
-        
+        const isCurrentUser =
+          userStore.user &&
+          (message.sender.id === userStore.user.id ||
+            message.sender.id === "hardcoding");
+
+        const showAvatar =
+          !isCurrentUser &&
+          (index === 0 ||
+            conversationMessages[index - 1].sender.id !== message.sender.id);
+
         return (
           <div
             key={message.id}
@@ -57,10 +61,7 @@ const MessageList: React.FC = observer(() => {
             {!isCurrentUser && showAvatar && (
               <div className="mr-2 flex-shrink-0">
                 <Avatar
-                  src={
-                    message.sender.avatar ||
-                    "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg"
-                  }
+                  src={message.sender.avatar || ""}
                   alt="User"
                   size="sm"
                 />
@@ -73,10 +74,10 @@ const MessageList: React.FC = observer(() => {
               }`}
             >
               <div
-                className={`p-3 rounded-lg${
+                className={`p-3 rounded-lg ${
                   isCurrentUser
                     ? "bg-blue-500 text-white rounded-br-none"
-                    : "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-none"
+                    : "bg-gray-200 dark:bg-gray-800 text-black dark:text-gray-100 rounded-bl-none"
                 }`}
               >
                 {message.type === "code" ? (
@@ -117,7 +118,7 @@ const MessageList: React.FC = observer(() => {
           </div>
         );
       })}
-      
+
       <div ref={messagesEndRef} />
     </div>
   );

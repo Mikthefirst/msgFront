@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { Play, Pause } from "lucide-react";
-const server = import.meta.env.SERVER_URL;
+
+const server = import.meta.env.VITE_SERVER_URL;
+
 interface VoiceMessageRendererProps {
   fileUrl: string;
 }

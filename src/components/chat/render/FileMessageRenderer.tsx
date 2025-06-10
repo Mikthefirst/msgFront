@@ -7,7 +7,7 @@ import {
   Eye,
   XCircle,
 } from "lucide-react";
-export const server = import.meta.env.SERVER_URL;
+const server = import.meta.env.VITE_SERVER_URL;
 
 
 interface FileMessageRendererProps {

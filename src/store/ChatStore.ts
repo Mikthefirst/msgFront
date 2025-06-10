@@ -1,12 +1,12 @@
 // stores/ChatStore.ts
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, observable } from "mobx";
 import { RootStore } from "./RootStore";
 import { Message, MessageType,  } from "../types";
 import ChatService from "./services/ChatService";
 export class ChatStore {
   rootStore: RootStore;
   chatService: ChatService;
-  messages: Record<string, Message[]> = {};
+  messages = observable.object<Record<string, Message[]>>({});
   activeConversationId: string | null = null;
   isLoading = false;
   error: string | null = null;
@@ -17,7 +17,7 @@ export class ChatStore {
     makeAutoObservable(this);
   }
 
-  get activeMessages(): Message[] {
+  get activeMessages() {
     return this.activeConversationId
       ? this.messages[this.activeConversationId] || []
       : [];
@@ -29,32 +29,36 @@ export class ChatStore {
 
   async fetchMessages() {
     this.isLoading = true;
-    if (this.activeConversationId) {
-      try {
-        const msgs = await this.chatService.fetchMessages(
-          this.activeConversationId
-        );
-        this.messages[this.activeConversationId] = msgs.map((msg) => ({
-          ...msg,
-          read: true,
-        }));
-        this.rootStore.conversationStore.resetUnread(this.activeConversationId);
+
+    if (!this.activeConversationId) {
+      console.log("empty conv_id field");
+      this.isLoading = false;
+      return;
+    }
+
+    try {
+      const msgs = await this.chatService.fetchMessages(
+        this.activeConversationId
+      );
+      const enriched = msgs.map((msg) => ({ ...msg, read: true }));
+      this.messages[this.activeConversationId] = enriched;
+
+      // Обновляем conversationStore
+      this.rootStore.conversationStore.resetUnread(this.activeConversationId);
+      if (enriched.length > 0) {
         this.rootStore.conversationStore.updateLastMessage(
           this.activeConversationId,
-          this.messages[this.activeConversationId][
-            this.messages[this.activeConversationId].length - 1
-          ]
+          enriched[enriched.length - 1]
         );
-      } catch (e) {
-        console.log(e);
-        this.error = String(e);
-      } finally {
-        this.isLoading = false;
       }
-    } else {
-      console.log("empty conv_id field");
+    } catch (e) {
+      console.log(e);
+      this.error = String(e);
+    } finally {
+      this.isLoading = false;
     }
   }
+
   sendStatus = async (
     conversationId: string,
     statusData: Record<string, string>
@@ -74,10 +78,6 @@ export class ChatStore {
       } else if (type === MessageType.code) {
         await this.chatService.sendMessageCODE(conversationId, content);
       }
-
-      this.fetchMessages();
-      // УБРАНО: локальное добавление сообщения
-      // Оно теперь будет приходить через WebSocket ("new-message")
     } catch (e) {
       console.log(e);
       this.error = String(e);
@@ -105,20 +105,14 @@ export class ChatStore {
   }
 
   handleIncomingMessage = (message: Message) => {
-    const { conversationId } = message;
+    console.log("handle new msg", message);
+    const convId = message.conversationId;
+    const current = this.messages[convId] || [];
 
-    if (!this.messages[conversationId]) {
-      this.messages[conversationId] = [];
-    }
+    this.messages[convId] = [...current, message];
 
-    this.messages[conversationId].push(message);
-
-    if (conversationId === this.activeConversationId) {
-      this.rootStore.conversationStore.resetUnread(conversationId);
-      this.rootStore.conversationStore.updateLastMessage(
-        conversationId,
-        message
-      );
+    if (convId === this.activeConversationId) {
+      this.rootStore.conversationStore.updateLastMessage(convId, message);
     }
   };
 }

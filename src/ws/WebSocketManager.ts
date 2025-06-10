@@ -1,5 +1,7 @@
 // ws/WebSocketManager.ts
 import { io, Socket } from "socket.io-client";
+import { Message } from "../types";
+import { rootStore } from "../store/RootStore";
 
 class WebSocketManager {
   private socket: Socket | null = null;
@@ -18,6 +20,17 @@ class WebSocketManager {
     this.socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
     });
+
+    this.socket.on(
+      "new-message",
+      (data: { action: string; message: Message }) => {
+        console.log("[Socket] Received new message:", data);
+
+        if (data?.message) {
+          rootStore.chatStore.handleIncomingMessage(data.message);
+        }
+      }
+    );
   }
 
   joinRoom(conversationId: string) {
