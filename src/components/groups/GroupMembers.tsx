@@ -2,6 +2,7 @@ import React from "react";
 import { User, UserX, Shield } from "lucide-react";
 import Button from "../ui/Button";
 import { GroupParticipant } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 interface GroupMembersProps {
   participants: GroupParticipant[];
@@ -18,6 +19,8 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
   onUnbanUser,
   onMakeAdmin,
 }) => {
+  const navigate = useNavigate(); // 👈
+
   return (
     <div className="w-80 bg-white dark:bg-gray-800 p-4 overflow-y-auto">
       <h2 className="text-lg font-semibold mb-4 flex items-center">
@@ -44,18 +47,23 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
               `}
             >
               <div className="flex items-center mb-2">
-                {participant.avatar ? (
-                  <img
-                    src={participant.avatar}
-                    alt={participant.nickname || participant.username}
-                    className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                    <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                  </div>
-                )}
-
+                <div
+                  className="cursor-pointer"
+                  onClick={() => navigate(`/profile/${participant.id}`)} // 👈 переход по клику
+                >
+                  {participant.avatar ? (
+                    <img
+                      src={participant.avatar}
+                      alt={participant.nickname || participant.username}
+                      className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                      <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                    </div>
+                  )}
+                </div>
+                
                 <div className="ml-3 flex-1">
                   <div className="font-medium flex items-center">
                     {participant.nickname || participant.username}

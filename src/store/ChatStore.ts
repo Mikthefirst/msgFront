@@ -8,6 +8,7 @@ export class ChatStore {
   chatService: ChatService;
   messages = observable.object<Record<string, Message[]>>({});
   activeConversationId: string | null = null;
+  searchQuery = "";
   isLoading = false;
   error: string | null = null;
 
@@ -115,4 +116,16 @@ export class ChatStore {
       this.rootStore.conversationStore.updateLastMessage(convId, message);
     }
   };
+
+  setSearchQuery(query: string) {
+    this.searchQuery = query;
+  }
+
+  get filteredMessages() {
+    return this.searchQuery.trim()
+      ? this.activeMessages.filter((msg) =>
+          msg.content.toLowerCase().includes(this.searchQuery.toLowerCase())
+        )
+      : this.activeMessages;
+  }
 }

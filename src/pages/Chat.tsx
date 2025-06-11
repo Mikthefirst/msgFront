@@ -21,8 +21,12 @@ const Chat: React.FC = observer(() => {
   return (
     <MainLayout sidebar={<ConversationList />}>
       <div className="flex flex-col h-full">
-        <ConversationHeader />
-        <MessageList />
+        <div className="flex-shrink-0 overflow-hidden">
+          <ConversationHeader />
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          <MessageList />
+        </div>
         <ChatInput />
       </div>
     </MainLayout>

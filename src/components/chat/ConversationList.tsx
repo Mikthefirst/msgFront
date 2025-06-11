@@ -137,7 +137,7 @@ const ConversationList: React.FC = observer(() => {
           );
         })}
       </div>
-      {isAdmin && (
+      {isAdmin ? (
         <div className="p-4">
           <button
             onClick={() => navigate("/admin")}
@@ -146,7 +146,18 @@ const ConversationList: React.FC = observer(() => {
             Панель администратора
           </button>
         </div>
-      )}
+      )
+      : (
+        <div className="p-4">
+          <button
+            onClick={() => navigate("/profile")}
+            className="w-full py-2 px-4 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors"
+          >
+            Перейти в профиль
+          </button>
+        </div>
+      )
+      }
     </div>
   );
 });

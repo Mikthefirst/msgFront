@@ -12,7 +12,10 @@ const Landing: React.FC = () => {
       <div className="min-h-screen bg-white dark:bg-gray-900">
         <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-3">
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                ВЕС.
+              </span>
               <MessageSquare className="h-8 w-8 text-blue-600 dark:text-blue-500" />
             </div>
 
@@ -139,12 +142,12 @@ const Landing: React.FC = () => {
                 with friends and family.
               </p>
               <Link to="/signup">
-                <Button
-                  size="lg"
-                  className="bg-white text-blue-600 hover:bg-gray-100 focus:ring-white"
+                <button
+                  type="button"
+                  className="px-6 py-3 text-lg font-semibold rounded-md bg-white text-black hover:bg-gray-100 focus:ring-2 focus:ring-white focus:outline-none transition"
                 >
                   Sign up
-                </Button>
+                </button>
               </Link>
             </div>
           </section>
@@ -153,13 +156,13 @@ const Landing: React.FC = () => {
         <footer className="bg-gray-100 dark:bg-gray-800 py-10">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="flex items-center mb-4 md:mb-0">
+              <div className="flex items-center mb-4 md:mb-0 space-x-2">
                 <MessageSquare className="h-6 w-6 text-blue-600 dark:text-blue-500" />
+                <span className="text-xl font-bold text-gray-900 dark:text-white">
+                  ВЕС.
+                </span>
               </div>
-
-              <div className="text-sm text-gray-600 dark:text-gray-300">
-                &copy; {new Date().getFullYear()} Ves. All rights reserved.
-              </div>
+              {/* остальной контент футера */}
             </div>
           </div>
         </footer>

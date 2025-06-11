@@ -1,6 +1,7 @@
 import React from "react";
 import AvatarWithFallback from "../../ui/AvatarWithFallback";
-const server = import.meta.env.SERVER_URL;
+const server = import.meta.env.VITE_SERVER_URL;
+
 interface SearchResultItemProps {
   item: any;
   onClick: (item: any) => void;

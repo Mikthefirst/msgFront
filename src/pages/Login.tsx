@@ -98,28 +98,6 @@ const Login: React.FC = () => {
           leftIcon={<Lock className="h-4 w-4" />}
         />
 
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              type="checkbox"
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label
-              htmlFor="remember-me"
-              className="ml-2 block text-sm text-gray-700 dark:text-gray-300"
-            >
-              Remember me
-            </label>
-          </div>
-
-          <a
-            href="#"
-            className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
-          >
-            Forgot password?
-          </a>
-        </div>
 
         <Button type="submit" fullWidth isLoading={isLoading}>
           Sign In

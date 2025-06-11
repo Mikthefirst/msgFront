@@ -15,7 +15,7 @@ const MessageList: React.FC = observer(() => {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   const activeConversationId = chatStore.activeConversationId;
-  const conversationMessages: Message[] = chatStore.activeMessages;
+  const conversationMessages: Message[] = chatStore.filteredMessages;
 
   // Fetch messages when active conversation changes
   useEffect(() => {

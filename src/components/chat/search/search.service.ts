@@ -1,6 +1,6 @@
 // services/search.service.ts
 
-const server = import.meta.env.SERVER_URL;
+const server = import.meta.env.VITE_SERVER_URL;
 
 
 export async function searchRoomsByName(term: string) {
