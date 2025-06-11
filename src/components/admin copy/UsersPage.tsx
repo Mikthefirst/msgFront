@@ -3,7 +3,7 @@ import UsersSidebar from './Sidebar/UsersSidebar';
 import UserInfo from './InfoPanels/UserInfo';
 import { User } from '../../types';
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
+console.log(server); 
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);

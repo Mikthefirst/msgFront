@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserCard from "../../components/profile/UserCard";
 import ChatList from "../../components/profile/ChatList";
+const server = import.meta.env.VITE_SERVER_URL;
 
 interface UserDto {
   id: string;
@@ -26,12 +27,12 @@ const UserProfileView: React.FC = () => {
   const [chats, setChats] = useState<Chat[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/users/${id}`)
+    fetch(`${server}/users/${id}`)
       .then((res) => res.json())
       .then((data) => setUser(data))
       .catch(console.error);
 
-    fetch(`http://localhost:3000/conversations/common/${id}`, {
+    fetch(`${server}/conversations/common/${id}`, {
       credentials: "include",
     })
       .then((res) => res.json())

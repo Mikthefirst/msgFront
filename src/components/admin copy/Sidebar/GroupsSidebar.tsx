@@ -2,7 +2,6 @@ import React, {  } from "react";
 import { Users } from "lucide-react";
 import { Group } from "../index";
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
 
 interface GroupsSidebarProps {
   groups: Group[];

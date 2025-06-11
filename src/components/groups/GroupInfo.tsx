@@ -8,7 +8,6 @@ import { fetchMemberCount } from '../../store/services/groupsService';
 
 
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
 
 interface GroupInfoProps {
   group: Group;

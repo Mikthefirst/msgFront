@@ -9,7 +9,6 @@ import ConversationSearch from "./search/ConversationSearch"; // ⬅️ новы
 import AvatarWithFallback from "../ui/AvatarWithFallback";
 
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
 
 const ConversationList: React.FC = observer(() => {
   const navigate = useNavigate();

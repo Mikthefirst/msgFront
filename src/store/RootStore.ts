@@ -1,4 +1,3 @@
-import { server } from './../../../project/src/store/services/groupsService';
 //RootStore.ts
 import { makeAutoObservable } from "mobx";
 import { ChatStore } from "./ChatStore";
@@ -6,7 +5,7 @@ import { ConversationStore } from "./ConversationStore";
 import { UserStore } from "./UserStore";
 import webSocketManager from "../ws/WebSocketManager";
 import { Message } from "../types";
-const server = "http://localhost:3000";
+const server = import.meta.env.VITE_SERVER_URL;
 
 export class RootStore {
   chatStore: ChatStore;

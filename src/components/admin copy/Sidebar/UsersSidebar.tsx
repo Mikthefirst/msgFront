@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { User, Shield, UserX } from "lucide-react";
 import { User as UserType } from "../../../types";
-const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
 
 interface UsersSidebarProps {
   users: UserType[];

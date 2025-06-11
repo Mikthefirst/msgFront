@@ -10,7 +10,7 @@ import {
 import { Group, GroupParticipant } from "./index";
 import MessageList from "./Chat/MessageList";
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
+console.log(server); 
 
 const GroupsPage: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);

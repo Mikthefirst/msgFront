@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Message } from "..";
 import AvatarWithFallbackProps from "../ui/Avatar";
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
+console.log(server); 
 
 interface MessageListProps {
   groupId: string;

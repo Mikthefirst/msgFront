@@ -8,6 +8,8 @@ import {
   fetchGroupParticipants,
 } from "../store/services/groupsService";
 import { Group, GroupParticipant } from "../types";
+const server = import.meta.env.VITE_SERVER_URL;
+
 
 const GroupsPage: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -81,13 +83,10 @@ const GroupsPage: React.FC = () => {
     if (!selectedGroup) return;
 
     try {
-      await fetch(
-        `http://localhost:3000/conversations/groups/${selectedGroup.id}/leave`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      await fetch(`${server}/conversations/groups/${selectedGroup.id}/leave`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
       // обновляем список групп
       setGroups((prev) => prev.filter((g) => g.id !== selectedGroup.id));
@@ -108,7 +107,7 @@ const GroupsPage: React.FC = () => {
 
     try {
       await fetch(
-        `http://localhost:3000/conversations/groups/${selectedGroup.id}/ban/${userId}`,
+        `${server}/conversations/groups/${selectedGroup.id}/ban/${userId}`,
         {
           method: "PATCH",
           credentials: "include",
@@ -126,7 +125,7 @@ const GroupsPage: React.FC = () => {
 
     try {
       await fetch(
-        `http://localhost:3000/conversations/groups/${selectedGroup.id}/unban/${userId}`,
+        `${server}/conversations/groups/${selectedGroup.id}/unban/${userId}`,
         {
           method: "PATCH",
           credentials: "include",
@@ -144,7 +143,7 @@ const GroupsPage: React.FC = () => {
 
     try {
       await fetch(
-        `http://localhost:3000/conversations/groups/${selectedGroup.id}/make-admin/${userId}`,
+        `${server}/conversations/groups/${selectedGroup.id}/make-admin/${userId}`,
         {
           method: "POST", // либо PATCH, в зависимости от вашего контроллера
           credentials: "include",

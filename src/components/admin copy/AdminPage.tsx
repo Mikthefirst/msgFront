@@ -6,7 +6,6 @@ import { Bell } from "lucide-react";
 import { useToast } from "./ui/Toast";
 import { Group } from ".";
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
 
 const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState<"groups" | "users">(

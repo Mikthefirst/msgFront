@@ -10,6 +10,7 @@ import {
   AtSign as NicknameIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+const server = import.meta.env.VITE_SERVER_URL;
 
 interface UserDto {
   id: string;
@@ -35,7 +36,7 @@ const UserProfile: React.FC = () => {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/users/get-user", { credentials: "include" })
+    fetch(`${server}/users/get-user`, { credentials: "include" })
       .then((res) => {
         if (!res.ok) throw new Error("Не удалось получить данные");
         return res.json();
@@ -65,7 +66,7 @@ const UserProfile: React.FC = () => {
     if (!user) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/users/${user.id}`, {
+      const res = await fetch(`${server}/users/${user.id}`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -81,10 +82,11 @@ const UserProfile: React.FC = () => {
       const data = new FormData();
       data.append("file", avatarFile);
       try {
-        const res = await fetch(
-          `http://localhost:3000/image-service/upload-avatar`,
-          { method: "POST", credentials: "include", body: data }
-        );
+        const res = await fetch(`${server}/image-service/upload-avatar`, {
+          method: "POST",
+          credentials: "include",
+          body: data,
+        });
         if (!res.ok) throw new Error("Ошибка загрузки аватара");
       } catch {
         alert("Не удалось загрузить аватар");
@@ -92,7 +94,7 @@ const UserProfile: React.FC = () => {
       }
     }
 
-    fetch("http://localhost:3000/users/get-user", { credentials: "include" })
+    fetch(`${server}/users/get-user`, { credentials: "include" })
       .then((res) => res.json())
       .then((data: UserDto) => {
         setUser(data);
@@ -152,7 +154,7 @@ const UserProfile: React.FC = () => {
                 <div className="relative group">
                   {user.avatar ? (
                     <img
-                      src={`http://localhost:3000/image-service/get-avatar`}
+                      src={`${server}/image-service/get-avatar`}
                       alt={user.full_name || user.username}
                       className="w-20 h-20 rounded-full object-cover ring-4 ring-blue-500/30 group-hover:ring-blue-500/50 transition-all duration-300"
                     />
@@ -300,18 +302,15 @@ const PasswordSection: React.FC<{ userId: string }> = ({ userId }) => {
     }
 
     try {
-      const res = await fetch(
-        `http://localhost:3000/users/change-password/${userId}`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentPassword: pwForm.currentPassword,
-            newPassword: pwForm.newPassword,
-          }),
-        }
-      );
+      const res = await fetch(`${server}/users/change-password/${userId}`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: pwForm.currentPassword,
+          newPassword: pwForm.newPassword,
+        }),
+      });
       if (!res.ok) throw new Error("Password change failed");
       alert("Password changed successfully");
       setPwForm({ currentPassword: "", newPassword: "", confirmPassword: "" });

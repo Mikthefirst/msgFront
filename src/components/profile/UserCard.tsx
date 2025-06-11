@@ -1,5 +1,6 @@
 import React from "react";
 import { User as UserIcon } from "lucide-react";
+const server = import.meta.env.VITE_SERVER_URL;
 
 interface UserDto {
   id: string;
@@ -14,7 +15,7 @@ const UserCard: React.FC<{ user: UserDto }> = ({ user }) => (
   <div className="flex items-center space-x-6 mb-6">
     {user.avatar ? (
       <img
-        src={`http://localhost:3000/image-service/get-avatar`}
+        src={`${server}/image-service/get-avatar`}
         alt={user.full_name || user.username}
         className="w-20 h-20 rounded-full object-cover ring-4 ring-blue-500/30"
       />

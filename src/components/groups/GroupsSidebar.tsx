@@ -4,7 +4,6 @@ import { Group } from "../../types";
 import CreateGroupModal from "./CreateGroupModal";
 
 const server = import.meta.env.VITE_SERVER_URL;
-console.log(server); // должно быть http://localhost:3000
 
 interface GroupsSidebarProps {
   groups: Group[];

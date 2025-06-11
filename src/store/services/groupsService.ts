@@ -1,9 +1,10 @@
 import { Group } from '../../types';
+const server = import.meta.env.VITE_SERVER_URL;
 
 // Fetch all conversations for the current user
 export const fetchUserGroups = async (): Promise<Group[]> => {
   try {
-    const response = await fetch("http://localhost:3000/conversations/for-user", {credentials: 'include'});
+    const response = await fetch(`${server}/conversations/for-user`, {credentials: 'include'});
     if (!response.ok) {
       return [];
     }
@@ -24,7 +25,7 @@ export const fetchUserGroups = async (): Promise<Group[]> => {
 export const checkIsAdmin = async (groupId: string): Promise<boolean> => {
   try {
     const response = await fetch(
-      `http://localhost:3000/conversations/is-group-admin/${groupId}`,
+      `${server}/conversations/is-group-admin/${groupId}`,
       { credentials: "include" }
     );
     if (!response.ok) {
@@ -44,7 +45,7 @@ export const checkIsAdmin = async (groupId: string): Promise<boolean> => {
 export const fetchGroupParticipants = async (groupId: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/conversations/groups/${groupId}/participants`,
+      `${server}/conversations/groups/${groupId}/participants`,
       { credentials: "include" }
     );
     if (!response.ok) {
@@ -62,8 +63,8 @@ export const fetchGroupParticipants = async (groupId: string) => {
 export const fetchMemberCount = async (conversationId: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/conversations/${conversationId}/member-count`,
-      {credentials:'include'}
+      `${server}/conversations/${conversationId}/member-count`,
+      { credentials: "include" }
     );
     const count = await response.json();
     return count;

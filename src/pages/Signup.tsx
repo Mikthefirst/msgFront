@@ -4,6 +4,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Mail, Lock, User } from "lucide-react";
+const server = import.meta.env.VITE_SERVER_URL;
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -47,7 +48,7 @@ const Signup: React.FC = () => {
     setApiError("");
 
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch(`${server}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

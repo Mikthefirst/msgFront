@@ -1,16 +1,14 @@
 // services/ChatService.ts
 import { Message, MessageType } from "../../types";
 import webSocketManager from "../../ws/WebSocketManager";
+const server = import.meta.env.VITE_SERVER_URL;
 
 export default class ChatService {
-  server: string;
-  constructor(server:string) {
-    this.server = server;
-  }
+
 
   async fetchMessages(conversationId: string): Promise<Message[]> {
     const res = await fetch(
-      `http://localhost:3000/messages/${conversationId}`,
+      `${server}/messages/${conversationId}`,
       { credentials: "include" }
     );
     if (!res.ok) throw new Error("Failed to load messages");
@@ -65,7 +63,7 @@ export default class ChatService {
     formData.append("file", file);
     console.log('send file', type)
     const res = await fetch(
-      `http://localhost:3000/image-service/upload-message-file/${conversationId}`, // или свой upload endpoint
+      `${server}/image-service/upload-message-file/${conversationId}`, // или свой upload endpoint
       {
         method: "POST",
         credentials: "include",
