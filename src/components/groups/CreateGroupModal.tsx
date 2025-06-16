@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 const server = import.meta.env.VITE_SERVER_URL;
 console.log(server); 
 interface UserOption {
@@ -9,9 +10,10 @@ interface UserOption {
 
 interface Props {
   onClose: () => void;
+  onGroupCreated: () => void;
 }
 
-const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
+const CreateGroupModal: React.FC<Props> = ({ onClose, onGroupCreated }) => {
   const [groupName, setGroupName] = useState("");
   const [groupNickname, setGroupNickname] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
@@ -48,25 +50,23 @@ const CreateGroupModal: React.FC<Props> = ({ onClose }) => {
     formData.append("groupNickname", groupNickname);
     formData.append("description", groupDescription);
     if (avatarFile) {
-      formData.append("avatar", avatarFile); // ключ "avatar" должен совпадать с тем, что принимает FileInterceptor
+      formData.append("file", avatarFile); // ключ "avatar" должен совпадать с тем, что принимает FileInterceptor
     }
     // participantIds[] — сериализуем массив, например, как JSON-строку или как несколько значений
     selectedIds.forEach((id) => formData.append("participantIds[]", id));
 
     try {
-      const res = await fetch(
-        `${server}/conversations/create-group`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: formData, // НЕ устанавливаем заголовок Content-Type — браузер сделает это сам
-        }
-      );
+      const res = await fetch(`${server}/conversations/create-group`, {
+        method: "POST",
+        credentials: "include",
+        body: formData, // НЕ устанавливаем заголовок Content-Type — браузер сделает это сам
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error("Failed to create group: " + text);
       }
       onClose();
+      onGroupCreated(); 
     } catch (err) {
       console.error(err);
     }

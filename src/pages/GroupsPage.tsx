@@ -17,25 +17,23 @@ const GroupsPage: React.FC = () => {
   const [participants, setParticipants] = useState<GroupParticipant[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const loadGroups = async () => {
+    try {
+      setLoading(true);
+      const userGroups = await fetchUserGroups();
+      setGroups(userGroups);
 
+      if (userGroups.length > 0) {
+        setSelectedGroup(userGroups[0]);
+      }
+    } catch (error) {
+      console.error("Failed to load groups:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   // Загружает список групп и устанавливает первую по умолчанию
   useEffect(() => {
-    const loadGroups = async () => {
-      try {
-        setLoading(true);
-        const userGroups = await fetchUserGroups();
-        setGroups(userGroups);
-
-        if (userGroups.length > 0) {
-          setSelectedGroup(userGroups[0]);
-        }
-      } catch (error) {
-        console.error("Failed to load groups:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadGroups();
   }, []);
 
@@ -156,6 +154,10 @@ const GroupsPage: React.FC = () => {
     }
   };
 
+  const handleGroupCreated = () => {
+    loadGroups(); // просто повторно загружаем
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
       <GroupsSidebar
@@ -163,6 +165,7 @@ const GroupsPage: React.FC = () => {
         selectedGroup={selectedGroup}
         onGroupSelect={handleGroupSelect}
         loading={loading}
+        onGroupCreated={handleGroupCreated}
       />
 
       {selectedGroup ? (

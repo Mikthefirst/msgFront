@@ -10,6 +10,7 @@ interface GroupsSidebarProps {
   selectedGroup: Group | null;
   onGroupSelect: (group: Group) => void;
   loading: boolean;
+  onGroupCreated: () => void;
 }
 
 const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
@@ -17,6 +18,7 @@ const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
   selectedGroup,
   onGroupSelect,
   loading,
+  onGroupCreated,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -50,7 +52,7 @@ const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
             />
           ))}
         </div>
-        {showModal && <CreateGroupModal onClose={closeModal} />}
+        {showModal && <CreateGroupModal onClose={closeModal} onGroupCreated={onGroupCreated} />}
       </div>
     );
   }
@@ -114,7 +116,12 @@ const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
           ))}
         </div>
       )}
-      {showModal && <CreateGroupModal onClose={closeModal} />}
+      {showModal && (
+        <CreateGroupModal
+          onClose={closeModal}
+          onGroupCreated={onGroupCreated}
+        />
+      )}
     </div>
   );
 };
