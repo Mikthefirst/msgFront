@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import Avatar from "../ui/Avatar";
 import { formatMessageTime } from "../../utils/dateUtils";
@@ -9,6 +9,7 @@ import CodeRenderer from "./render/CodeRenderer";
 import StatusDisplay from "./render/StatusDisplay";
 import FileMessageRenderer from "./render/FileMessageRenderer";
 import VoiceMessageRenderer from "./render/VoiceMessageRenderer";
+import { autorun } from "mobx";
 
 const MessageList: React.FC = observer(() => {
   const { chatStore, userStore } = useStore();
@@ -22,6 +23,16 @@ const MessageList: React.FC = observer(() => {
     if (!activeConversationId) return;
     chatStore.fetchMessages();
   }, [activeConversationId]);
+
+  // 🔧 Костыль: принудительный ререндер каждые 2 сек
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      forceUpdate((x) => x + 1);
+      chatStore.fetchMessages();
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Scroll to bottom when messages change
   useEffect(() => {

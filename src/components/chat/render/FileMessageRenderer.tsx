@@ -48,7 +48,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
       {/* Render Image or File block */}
       {isImage ? (
         <img
-          src={`${server}${fileUrl}`}
+          src={`${fileUrl}`}
           alt={fileName}
           className="rounded-lg max-h-60 object-contain mb-2 border"
         />
@@ -70,7 +70,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
 
       <div className="flex gap-4 items-center mt-1">
         <a
-          href={`${server}${fileUrl}`}
+          href={`${fileUrl.replace("/upload/", "/upload/fl_attachment/")}`}
           target="_blank"
           rel="noopener noreferrer"
           download
@@ -102,7 +102,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
               <XCircle className="w-6 h-6" />
             </button>
             <iframe
-              src={`${server}${fileUrl}`}
+              src={`${fileUrl}`}
               className="w-full h-full border-none"
               title="PDF Preview"
             ></iframe>

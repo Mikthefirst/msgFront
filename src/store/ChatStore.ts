@@ -1,12 +1,12 @@
 // stores/ChatStore.ts
-import { makeAutoObservable, observable } from "mobx";
+import { makeAutoObservable, observable, toJS } from "mobx";
 import { RootStore } from "./RootStore";
 import { Message, MessageType,  } from "../types";
 import ChatService from "./services/ChatService";
 export class ChatStore {
   rootStore: RootStore;
   chatService: ChatService;
-  messages = observable.object<Record<string, Message[]>>({});
+  messages = observable.map<string, Message[]>();
   activeConversationId: string | null = null;
   searchQuery = "";
   isLoading = false;
@@ -14,13 +14,13 @@ export class ChatStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-    this.chatService = new ChatService(this.rootStore.server);
+    this.chatService = new ChatService();
     makeAutoObservable(this);
   }
 
   get activeMessages() {
     return this.activeConversationId
-      ? this.messages[this.activeConversationId] || []
+      ? this.messages.get(this.activeConversationId) || []
       : [];
   }
 
@@ -42,7 +42,7 @@ export class ChatStore {
         this.activeConversationId
       );
       const enriched = msgs.map((msg) => ({ ...msg, read: true }));
-      this.messages[this.activeConversationId] = enriched;
+      this.messages.set(this.activeConversationId, enriched);
 
       // Обновляем conversationStore
       this.rootStore.conversationStore.resetUnread(this.activeConversationId);
@@ -96,9 +96,6 @@ export class ChatStore {
   async markAsRead(conversationId: string, messageId: string) {
     try {
       await this.chatService.markMessageAsRead(conversationId, messageId);
-      this.messages[conversationId] = (this.messages[conversationId] || []).map(
-        (msg) => (msg.id === messageId ? { ...msg, read: true } : msg)
-      );
     } catch (e) {
       console.log(e);
       this.error = String(e);
@@ -108,9 +105,10 @@ export class ChatStore {
   handleIncomingMessage = (message: Message) => {
     console.log("handle new msg", message);
     const convId = message.conversationId;
-    const current = this.messages[convId] || [];
+    const current = this.messages.get(convId) || [];
 
-    this.messages[convId] = [...current, message];
+    // ✅ Используем .set с новым массивом
+    this.messages.set(convId, [...current, message]);
 
     if (convId === this.activeConversationId) {
       this.rootStore.conversationStore.updateLastMessage(convId, message);
@@ -121,11 +119,17 @@ export class ChatStore {
     this.searchQuery = query;
   }
 
-  get filteredMessages() {
-    return this.searchQuery.trim()
-      ? this.activeMessages.filter((msg) =>
-          msg.content.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
-      : this.activeMessages;
+  get filteredMessages(): Message[] {
+    const messages = this.activeConversationId
+      ? toJS(this.messages.get(this.activeConversationId)) || []
+      : [];
+
+    if (this.searchQuery.trim()) {
+      return messages.filter((msg:Message) =>
+        msg.content.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+    return messages;
   }
 }
