@@ -102,7 +102,7 @@ const FileMessageRenderer: React.FC<FileMessageRendererProps> = ({
               <XCircle className="w-6 h-6" />
             </button>
             <iframe
-              src={`${fileUrl}`}
+              src={fileUrl.replace("/upload/fl_attachment/", "/upload/")}
               className="w-full h-full border-none"
               title="PDF Preview"
             ></iframe>

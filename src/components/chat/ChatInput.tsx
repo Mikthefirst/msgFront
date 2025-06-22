@@ -80,12 +80,23 @@ const ChatInput: React.FC = observer(() => {
 
 
   const handleSendMessage = () => {
+
+
+    console.log("Trying to send message...");
+    console.log("messageType:", messageType);
+    console.log("message:", message);
+    console.log("selectedFile:", selectedFile);
+    console.log("recordedBlob:", recordedBlob);
+    console.log("activeConversationId:", activeConversationId);
+
     if (
-      (!message.trim() && !selectedFile && messageType !== "status") ||
+      (!message.trim() && !selectedFile && messageType !== "status"&&!recordedBlob) ||
       !activeConversationId
     ) {
       return;
     }
+
+    console.log("Проверка пройдена");
 
     // === TEXT ===
     if (messageType === MessageType.text) {
@@ -362,7 +373,10 @@ const ChatInput: React.FC = observer(() => {
             className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSendMessage}
             disabled={
-              !message.trim() && !selectedFile && messageType !== "status" &&messageType!=="voice"
+              !message.trim() &&
+              !selectedFile &&
+              messageType !== "status" &&
+              !(messageType === "voice" && recordedBlob)
             }
             aria-label="Send message"
           >

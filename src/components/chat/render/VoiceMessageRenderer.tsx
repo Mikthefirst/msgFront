@@ -32,7 +32,9 @@ const VoiceMessageRenderer: React.FC<VoiceMessageRendererProps> = ({
       normalize: true,
     });
 
-    wavesurferRef.current.load(`${server}${fileUrl}`);
+    wavesurferRef.current.load(
+      `${fileUrl.replace("/upload/", "/upload/fl_attachment/")}`
+    );
 
     wavesurferRef.current.on("ready", () => {
       setDuration(wavesurferRef.current?.getDuration() || 0);
@@ -50,7 +52,7 @@ const VoiceMessageRenderer: React.FC<VoiceMessageRendererProps> = ({
     return () => {
       wavesurferRef.current?.destroy();
     };
-  }, [fileUrl]);
+  }, []);
 
   const togglePlay = () => {
     if (!wavesurferRef.current) return;
