@@ -60,7 +60,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         <div className="space-y-6">
           <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
             <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400 font-medium mb-3">
-              User Information
+              Информация о пользователе
             </h3>
 
             <div className="space-y-3">
@@ -88,7 +88,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
                 <div className="flex items-start">
                   <Calendar className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
                   <div>
-                    <p className="text-sm font-medium">Joined</p>
+                    <p className="text-sm font-medium">Присоединился</p>
                     <p className="text-gray-600 dark:text-gray-400">
                       {formatDateNormal(user.createdAt)}
                     </p>
@@ -101,10 +101,24 @@ const UserInfo: React.FC<UserInfoProps> = ({
                   <Ban className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
                   <div>
                     <p className="text-sm font-medium text-red-700 dark:text-red-400">
-                      Ban Reason
+                      Причина бана
                     </p>
                     <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                       {user.banReason}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {user.isBlocked && user.adminMessage && (
+                <div className="flex items-start">
+                  <Mail className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
+                  <div>
+                    <p className="text-sm font-medium text-red-700 dark:text-red-400">
+                      Вопросы к админу
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                      {user.adminMessage}
                     </p>
                   </div>
                 </div>
@@ -125,10 +139,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
             )}
 
             {user.isBlocked ? (
-              <Button
-                onClick={() => onUnbanUser(user.id)}
-                className="w-full"
-              >
+              <Button onClick={() => onUnbanUser(user.id)} className="w-full">
                 Unban User
               </Button>
             ) : (

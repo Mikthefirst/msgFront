@@ -21,6 +21,9 @@ export interface User {
   isBlocked: boolean;
   isAdmin: boolean;
   banReason?: string;
+  adminMessage?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Message {

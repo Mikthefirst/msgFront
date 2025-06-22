@@ -4,6 +4,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { Mail, Lock } from "lucide-react";
+import AdminContact from "../components/AdminContact";
 const server = import.meta.env.VITE_SERVER_URL;
 
 const Login: React.FC = () => {
@@ -13,6 +14,10 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const [banReason, setBanReason] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -51,7 +56,16 @@ const Login: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        if (response.status === 403 && data.banReason) {
+          setBanReason(data.banReason);
+          // Показываем обратную связь через 2 секунды
+          setTimeout(() => {
+            setShowFeedback(true);
+          }, 2000);
+        } else {
+          throw new Error(data.message || "Login failed");
+        }
+        return;
       }
       navigate("/chat");
 
@@ -69,6 +83,9 @@ const Login: React.FC = () => {
     <AuthLayout
       heading="Welcome back"
       subheading="Sign in to access your account"
+      childrenRight={
+        banReason && showFeedback && <AdminContact reason={banReason} />
+      }
     >
       <form onSubmit={handleSubmit}>
         {error && (
@@ -98,7 +115,6 @@ const Login: React.FC = () => {
           error={errors.password}
           leftIcon={<Lock className="h-4 w-4" />}
         />
-
 
         <Button type="submit" fullWidth isLoading={isLoading}>
           Sign In
