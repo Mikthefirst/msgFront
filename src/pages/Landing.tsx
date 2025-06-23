@@ -39,14 +39,14 @@ const Landing: React.FC = () => {
 
               <Link to="/login">
                 <Button size="sm" variant="outline">
-                  Log in
+                  Войти
                 </Button>
               </Link>
               <Link
                 to="/signup"
                 className="ml-4  text-blue-600 hover:text-blue-500 dark:text-blue-400"
               >
-                <Button size="sm">Sign up</Button>
+                <Button size="sm">Регистрация</Button>
               </Link>
             </div>
           </div>
@@ -59,19 +59,19 @@ const Landing: React.FC = () => {
               <div className="flex flex-col md:flex-row items-center">
                 <div className="md:w-1/2 mb-10 md:mb-0">
                   <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-                    Stay connected with friends and family
+                    Оставайтесь на связи с друзьями и семьей{" "}
                   </h1>
                   <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-                    Fast, simple, and secure messaging for free. Connect with
-                    the people who matter most.
+                    Быстрый, простой и безопасный обмен сообщениями бесплатно.
+                    Свяжитесь с людьми, которые наиболее важны.
                   </p>
                   <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                     <Link to="/signup">
-                      <Button size="lg">Get Started</Button>
+                      <Button size="lg">Начать</Button>
                     </Link>
                     <Link to="/login">
                       <Button size="lg" variant="outline">
-                        Log in
+                        Войти
                       </Button>
                     </Link>
                   </div>
@@ -91,40 +91,40 @@ const Landing: React.FC = () => {
           <section className="py-20 bg-white dark:bg-gray-900">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-                Everything you need to stay connected
+                Все, что вам нужно, чтобы оставаться на связи{" "}
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg">
                   <MessageSquare className="h-12 w-12 text-blue-600 dark:text-blue-500 mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                    Instant Messaging
+                    Мгновенные сообщения
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Send messages instantly to friends and family, with read
-                    receipts and typing indicators.
+                    Мгновенно отправляйте сообщения друзьям и близким с
+                    уведомлениями о прочтении и индикаторами ввода.
                   </p>
                 </div>
 
                 <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg">
                   <Users className="h-12 w-12 text-blue-600 dark:text-blue-500 mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                    Group Chats
+                    Групповые чаты
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Create groups with friends, family, or colleagues to
-                    coordinate and stay in touch.
+                    Создавайте группы с друзьями, семьей или коллегами, чтобы
+                    координировать действия и оставаться на связи.
                   </p>
                 </div>
 
                 <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg">
                   <Shield className="h-12 w-12 text-blue-600 dark:text-blue-500 mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                    Secure Messaging
+                    Безопасный обмен сообщениями
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Your messages are secure and private, with strong encryption
-                    to protect your conversations.
+                    Ваши сообщения защищены и конфиденциальны благодаря
+                    надежному шифрованию, защищающему ваши разговоры.
                   </p>
                 </div>
               </div>
@@ -135,18 +135,14 @@ const Landing: React.FC = () => {
           <section className="py-20 bg-blue-600 dark:bg-blue-700">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl font-bold text-white mb-6">
-                Ready to start messaging?
+                Готовы начать?
               </h2>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Join millions of people already using Ves. to stay connected
-                with friends and family.
-              </p>
               <Link to="/signup">
                 <button
                   type="button"
                   className="px-6 py-3 text-lg font-semibold rounded-md bg-white text-black hover:bg-gray-100 focus:ring-2 focus:ring-white focus:outline-none transition"
                 >
-                  Sign up
+                  Зарегестрироваться
                 </button>
               </Link>
             </div>

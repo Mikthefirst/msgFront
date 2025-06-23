@@ -60,14 +60,14 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
         <div className="space-y-6">
           <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
             <h3 className="text-sm uppercase text-gray-500 dark:text-gray-400 font-medium mb-3">
-              Group Information
+              Информация о группах
             </h3>
 
             <div className="space-y-3">
               <div className="flex items-start">
                 <User className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
                 <div>
-                  <p className="text-sm font-medium">Created by</p>
+                  <p className="text-sm font-medium">Создатель</p>
                   <p className="text-gray-600 dark:text-gray-400">
                     {group.createdBy?.nickname ||
                       group.createdBy?.username ||
@@ -79,7 +79,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
               <div className="flex items-start">
                 <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
                 <div>
-                  <p className="text-sm font-medium">Created at</p>
+                  <p className="text-sm font-medium">Время создания</p>
                   <p className="text-gray-600 dark:text-gray-400">
                     {formatDateNormal(group.CreatedAt)}
                   </p>
@@ -90,7 +90,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
                 <div className="flex items-start">
                   <FileText className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
                   <div>
-                    <p className="text-sm font-medium">Description</p>
+                    <p className="text-sm font-medium">Описание</p>
                     <p className="text-gray-600 dark:text-gray-400">
                       {group.description}
                     </p>
@@ -101,7 +101,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
               <div className="flex items-start">
                 <Users className="h-5 w-5 text-gray-500 dark:text-gray-400 mt-0.5 mr-3" />
                 <div>
-                  <p className="text-sm font-medium">Members</p>
+                  <p className="text-sm font-medium">Члены</p>
                   <p className="text-gray-600 dark:text-gray-400">
                     {memberCount !== null
                       ? `${memberCount} members`
@@ -114,7 +114,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onLeaveGroup }) => {
 
           <div className="pt-4">
             <Button onClick={onLeaveGroup} variant="danger" className="w-full">
-              Leave Group
+              Покинуть
             </Button>
           </div>
         </div>

@@ -25,12 +25,12 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
     <div className="w-80 bg-white dark:bg-gray-800 p-4 overflow-y-auto">
       <h2 className="text-lg font-semibold mb-4 flex items-center">
         <User className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-500" />
-        Members
+        Члены группы
       </h2>
 
       {participants.length === 0 ? (
         <div className="py-4 text-center text-gray-500 dark:text-gray-400">
-          <p>No members found</p>
+          <p>Никого нет?</p>
         </div>
       ) : (
         <div className="space-y-3">

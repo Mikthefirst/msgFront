@@ -81,8 +81,8 @@ const Login: React.FC = () => {
 
   return (
     <AuthLayout
-      heading="Welcome back"
-      subheading="Sign in to access your account"
+      heading="Добро пожаловать"
+      subheading="Войдите, чтобы получить доступ к своей учетной записи"
       childrenRight={
         banReason && showFeedback && <AdminContact reason={banReason} />
       }
@@ -97,7 +97,7 @@ const Login: React.FC = () => {
         <Input
           label="Email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Введите почту"
           fullWidth
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -108,7 +108,7 @@ const Login: React.FC = () => {
         <Input
           label="Password"
           type="password"
-          placeholder="Enter your password"
+          placeholder="Введите пароль"
           fullWidth
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -117,16 +117,16 @@ const Login: React.FC = () => {
         />
 
         <Button type="submit" fullWidth isLoading={isLoading}>
-          Sign In
+          Войти
         </Button>
 
         <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          Don't have an account?{" "}
+          Нет аккаунта?{" "}
           <Link
             to="/signup"
             className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
           >
-            Sign up
+            Регистрация
           </Link>
         </p>
       </form>

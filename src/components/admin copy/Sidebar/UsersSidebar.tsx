@@ -21,7 +21,7 @@ const UsersSidebar: React.FC<UsersSidebarProps> = ({
     <div className="flex items-center justify-between mb-4">
       <h2 className="text-lg font-semibold flex items-center">
         <User className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-500" />
-        Users
+        Пользователи
       </h2>
     </div>
   );

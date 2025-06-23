@@ -9,7 +9,6 @@ import CodeRenderer from "./render/CodeRenderer";
 import StatusDisplay from "./render/StatusDisplay";
 import FileMessageRenderer from "./render/FileMessageRenderer";
 import VoiceMessageRenderer from "./render/VoiceMessageRenderer";
-import { autorun } from "mobx";
 
 const MessageList: React.FC = observer(() => {
   const { chatStore, userStore } = useStore();
@@ -17,6 +16,23 @@ const MessageList: React.FC = observer(() => {
 
   const activeConversationId = chatStore.activeConversationId;
   const conversationMessages: Message[] = chatStore.filteredMessages;
+
+  // Удаляем дубликаты по sender.id + content или sender.id + fileUrl
+  const deduplicatedMessages = conversationMessages.filter(
+    (message, index, self) => {
+      return (
+        self.findIndex(
+          (m) =>
+            m.sender.id === message.sender.id &&
+            ((m.content === message.content &&
+              m.type !== "file" &&
+              m.type !== "image" &&
+              m.type !== "voice") ||
+              (m.fileUrl && m.fileUrl === message.fileUrl))
+        ) === index
+      );
+    }
+  );
 
   // Fetch messages when active conversation changes
   useEffect(() => {
@@ -30,7 +46,7 @@ const MessageList: React.FC = observer(() => {
     const interval = setInterval(() => {
       forceUpdate((x) => x + 1);
       chatStore.fetchMessages();
-    }, 2000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -43,7 +59,7 @@ const MessageList: React.FC = observer(() => {
     return (
       <div className="flex items-center justify-center h-full">
         <p className="text-gray-500 dark:text-gray-400">
-          Select a conversation to start messaging
+          Выберите беседу, чтобы начать обмен сообщениями
         </p>
       </div>
     );
@@ -51,7 +67,7 @@ const MessageList: React.FC = observer(() => {
 
   return (
     <div className="p-4 overflow-y-auto flex-1">
-      {conversationMessages.map((message, index) => {
+      {deduplicatedMessages.map((message, index) => {
         const isCurrentUser =
           userStore.user &&
           (message.sender.id === userStore.user.id ||
@@ -60,7 +76,7 @@ const MessageList: React.FC = observer(() => {
         const showAvatar =
           !isCurrentUser &&
           (index === 0 ||
-            conversationMessages[index - 1].sender.id !== message.sender.id);
+            deduplicatedMessages[index - 1].sender.id !== message.sender.id);
 
         return (
           <div

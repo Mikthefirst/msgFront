@@ -77,7 +77,7 @@ const ConversationList: React.FC = observer(() => {
 
       <div className="flex items-center justify-between p-4">
         <h2 className="font-semibold text-gray-900 dark:text-white">
-          Messages
+          Чаты
         </h2>
         <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors">
           <Plus className="h-4 w-4" onClick={() => navigate("/group")} />

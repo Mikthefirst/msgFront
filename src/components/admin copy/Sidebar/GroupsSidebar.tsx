@@ -20,7 +20,7 @@ const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
     <div className="flex items-center justify-between mb-4">
       <h2 className="text-lg font-semibold flex items-center">
         <Users className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-500" />
-        Groups
+        Группы
       </h2>
     </div>
   );
@@ -46,7 +46,7 @@ const GroupsSidebar: React.FC<GroupsSidebarProps> = ({
       {renderHeader()}
       {groups.length === 0 ? (
         <div className="py-4 text-center text-gray-500 dark:text-gray-400">
-          <p>No groups found</p>
+          <p>Групп нет</p>
         </div>
       ) : (
         <div className="space-y-2">

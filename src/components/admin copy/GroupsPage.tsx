@@ -103,11 +103,11 @@ const GroupsPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Group Info
+                  Информация о группе
                 </h2>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Details and group actions
+                Информация о группе
               </p>
             </div>
 
@@ -127,11 +127,11 @@ const GroupsPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Messages
+                  Сообщения
                 </h2>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Group conversation
+                Групповой чат
               </p>
             </div>
 

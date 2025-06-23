@@ -67,11 +67,12 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
           ) : (
             <div className="text-center text-white px-8">
               <h2 className="text-4xl font-bold mb-4">
-                Connect with friends and the world around you
+                Общайтесь с друзьями и окружающим миром
               </h2>
               <p className="text-xl">
-                Stay in touch with friends and loved ones with our fast, simple,
-                and secure messaging app.
+                Оставайтесь на связи с друзьями и близкими с помощью нашего
+                быстрого, простого и безопасного приложения для обмена
+                сообщениями.
               </p>
             </div>
           )}

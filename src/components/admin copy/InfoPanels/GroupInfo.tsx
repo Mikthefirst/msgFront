@@ -60,7 +60,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onBanGroup }) => {
             <User className="h-4 w-4 text-gray-500 dark:text-gray-400 mt-0.5 mr-2" />
             <div className="text-sm">
               <span className="text-gray-600 dark:text-gray-400">
-                Created by:{" "}
+                Создана:{" "}
               </span>
               <span className="font-medium">
                 {group.createdBy?.nickname ||
@@ -74,7 +74,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onBanGroup }) => {
             <Clock className="h-4 w-4 text-gray-500 dark:text-gray-400 mt-0.5 mr-2" />
             <div className="text-sm">
               <span className="text-gray-600 dark:text-gray-400">
-                Created:{" "}
+                Время создания:{" "}
               </span>
               <span className="font-medium">
                 {formatDateNormal(group.CreatedAt)}
@@ -95,7 +95,7 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ group, onBanGroup }) => {
             <Users className="h-4 w-4 text-gray-500 dark:text-gray-400 mt-0.5 mr-2" />
             <div className="text-sm">
               <span className="text-gray-600 dark:text-gray-400">
-                Members:{" "}
+                Члены:{" "}
               </span>
               <span className="font-medium">
                 {memberCount !== null ? memberCount : "Unknown"}
